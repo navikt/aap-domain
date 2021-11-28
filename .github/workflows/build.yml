@@ -1,0 +1,44 @@
+name: Bygg og deploy
+
+on:
+  push:
+    branches:
+      - master         # Push events on master branch
+    
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release Drafter
+        uses: release-drafter/release-drafter@v5
+        id: drafter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+     
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      
+      - name: Hent tag    
+        run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+       
+      - name: Bygg og test
+        shell: bash
+        run: |
+          echo "Building $(echo $GITHUB_SHA | cut -c1-7)"
+          mvn   deploy  -Dmaven.wagon.http.pool=false -e --batch-mode --settings ./.m2/settings.xml 
+          echo "Bygget og testet"
+        env:
+          GITHUB_USERNAME: x-access-token
+          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

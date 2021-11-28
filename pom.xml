@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>no.nav.aap</groupId>
+    <artifactId>aap-doman</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>aap-domain</name>
+    <description>aap-domain</description>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.0</version>
+        <relativePath/>
+    </parent>
+    <properties>
+        <conditionals.version>2.0.13</conditionals.version>
+        <graphql.version>1.0.0</graphql.version>
+        <i18n.version>1.29</i18n.version>
+        <java.version>17</java.version>
+        <kotlin.version>1.6.0</kotlin.version>
+        <logstash.version>7.0.1</logstash.version>
+        <mock-oauth2-server.version>0.3.6</mock-oauth2-server.version>
+        <okhttp3.version>4.9.1</okhttp3.version>
+        <problem.version>0.27.0</problem.version>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <springdoc.version>1.5.12</springdoc.version>
+        <token.validation.version>1.3.9</token.validation.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+    </dependencies>
+    <scm>
+        <connection>scm:git:https://github.com/navikt/aap-domain.git</connection>
+        <developerConnection>scm:git:https://github.com/navikt/aap-domain.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+<build>
+<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+<plugins>
+    <plugin>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <executions>
+            <execution>
+                <id>compile</id>
+                <phase>compile</phase>
+                <goals>
+                    <goal>compile</goal>
+                </goals>
+            </execution>
+            <execution>
+                <id>test-compile</id>
+                <phase>test-compile</phase>
+                <goals>
+                    <goal>test-compile</goal>
+                </goals>
+            </execution>
+        </executions>
+        <configuration>
+            <args>
+                <arg>-Xjsr305=strict</arg>
+            </args>
+            <compilerPlugins>
+                <plugin>spring</plugin>
+            </compilerPlugins>
+            <jvmTarget>${java.version}</jvmTarget>
+        </configuration>
+        <dependencies>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-allopen</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+        </dependencies>
+    </plugin>
+</plugins>
+</build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Github navikt Maven Packages</name>
+            <url>https://maven.pkg.github.com/navikt/aap-domain</url>
+        </repository>
+    </distributionManagement>
+</project>
