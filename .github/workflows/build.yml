@@ -3,7 +3,7 @@ name: Bygg og deploy
 on:
   push:
     branches:
-      - ma         # Push events on master branch
+      - main         # Push events on master branch
     
 jobs:
   release-notes:
