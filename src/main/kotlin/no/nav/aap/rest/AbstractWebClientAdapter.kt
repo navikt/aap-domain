@@ -1,6 +1,5 @@
 package no.nav.aap.rest
 
-import no.nav.aap.api.rest.AbstractRestConfig
 import no.nav.aap.health.Pingable
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
