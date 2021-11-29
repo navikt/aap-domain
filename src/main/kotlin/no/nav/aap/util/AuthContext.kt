@@ -6,7 +6,6 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.springframework.stereotype.Component
 
 
-@Component
 class AuthContext(private val ctxHolder: TokenValidationContextHolder) {
     fun getSubject(issuer: String = IDPORTEN) = getClaim(issuer, "pid")
     fun getFnr(issuer: String = IDPORTEN): Fødselsnummer =
