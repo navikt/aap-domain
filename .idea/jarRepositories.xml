@@ -2,6 +2,11 @@
 <project version="4">
   <component name="RemoteRepositoriesConfiguration">
     <remote-repository>
+      <option name="id" value="fp" />
+      <option name="name" value="GitHub felles Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/navikt/fp-felles" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="fp-felles" />
       <option name="name" value="GitHub felles Apache Maven Packages" />
       <option name="url" value="https://maven.pkg.github.com/navikt/fp-felles/" />
@@ -15,6 +20,11 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="aap" />
+      <option name="name" value="GitHub felles Apache Maven Packages" />
+      <option name="url" value="https://maven.pkg.github.com/navikt/aap-domain" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
