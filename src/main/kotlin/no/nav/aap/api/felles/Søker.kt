@@ -18,4 +18,6 @@ data class Periode(val fom: LocalDate, val tom: LocalDate?) {
     fun varighetDager() = tom?.let { Duration.between(fom.atStartOfDay(), it.atStartOfDay()).toDays() } ?: -1
 }
 
-data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val periode: Periode)
+data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val periode: Periode) {
+    val fulltNavn = søker.navn.navn
+}
