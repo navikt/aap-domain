@@ -19,5 +19,5 @@ data class Periode(val fom: LocalDate, val tom: LocalDate?) {
 }
 
 data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val periode: Periode) {
-    val fulltNavn = søker.navn.navn
+    val fulltNavn = søker.navn?.navn
 }
