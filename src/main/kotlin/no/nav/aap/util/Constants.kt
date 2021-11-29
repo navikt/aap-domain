@@ -1,6 +1,7 @@
 package no.nav.aap.util
 
 object Constants {
+    const val JOARK = "JOARK"
     const val PDL_USER = "PDL"
     const val STS = "STS"
     const val TEMA = "TEMA"
