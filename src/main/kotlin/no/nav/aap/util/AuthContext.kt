@@ -1,6 +1,8 @@
 package no.nav.aap.util
 
 import no.nav.aap.api.config.Constants.IDPORTEN
+import no.nav.aap.api.felles.Fødselsnummer
+import no.nav.aap.util.Constants.IDPORTEN
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.springframework.stereotype.Component
 
