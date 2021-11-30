@@ -34,6 +34,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                 next.exchange(
                         ClientRequest.from(req)
                             .header(MDCUtil.NAV_CONSUMER_ID, MDCUtil.consumerId(defaultConsumerId))
+                            .header(MDCUtil.NAV_CONSUMER_ID2, MDCUtil.consumerId(defaultConsumerId))
                             .header(MDCUtil.NAV_CALL_ID, MDCUtil.callId())
                             .header(MDCUtil.NAV_CALL_ID1, MDCUtil.callId())
                             .header(MDCUtil.NAV_CALL_ID2, MDCUtil.callId())
