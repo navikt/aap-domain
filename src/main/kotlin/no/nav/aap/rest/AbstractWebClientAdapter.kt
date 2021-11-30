@@ -45,8 +45,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                 next.exchange(
                         ClientRequest.from(req)
                             .header(Constants.TEMA, Constants.AAP)
-                            .build()
-                             )
+                            .build())
             }
     }
 }
