@@ -24,11 +24,11 @@ data class Dokument(
     val dokumentVarianter: List<DokumentVariant> = mutableListOf()
 )
 
-data class DokumentVariant(
-    val filtype: String = "PDFA",
-    val fysiskDokument: String,
-    val variantformat: String = "ARKIV"
-)
+data class DokumentVariant(val filtype: String = "PDFA", val fysiskDokument: String, val variantformat: String = "ARKIV") {
+    override fun toString(): String {
+        override fun toString() = "${javaClass.simpleName} [filtype=$filtype,variantformat=$variantformat,fysiskDokument=${fysiskDokument.length} bytes]"
+    }
+}
 
 data class Sak(
     val sakstype: Sakstype,
