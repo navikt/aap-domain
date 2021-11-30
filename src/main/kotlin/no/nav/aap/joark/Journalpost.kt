@@ -25,9 +25,7 @@ data class Dokument(
 )
 
 data class DokumentVariant(val filtype: String = "PDFA", val fysiskDokument: String, val variantformat: String = "ARKIV") {
-    override fun toString(): String {
         override fun toString() = "${javaClass.simpleName} [filtype=$filtype,variantformat=$variantformat,fysiskDokument=${fysiskDokument.length} bytes]"
-    }
 }
 
 data class Sak(
