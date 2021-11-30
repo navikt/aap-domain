@@ -36,8 +36,8 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                             .header(MDCUtil.NAV_CONSUMER_ID, MDCUtil.consumerId())
                             .header(MDCUtil.NAV_CALL_ID, MDCUtil.callId())
                             .header(MDCUtil.NAV_CALL_ID1, MDCUtil.callId())
-                            .build()
-                             )
+                            .header(MDCUtil.NAV_CALL_ID2, MDCUtil.callId())
+                            .build())
             }
 
         fun temaFilterFunction() =
