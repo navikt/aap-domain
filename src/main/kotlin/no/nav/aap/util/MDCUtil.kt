@@ -13,5 +13,9 @@ object MDCUtil {
         toMDC(NAV_CALL_ID,id)
         id
     }
+    fun consumerId(defaultValue: String): String? = MDC.get(NAV_CONSUMER_ID) ?:  run {
+        toMDC(NAV_CONSUMER_ID,defaultValue)
+        defaultValue
+    }
     fun toMDC(key: String, value: String?, defaultValue: String? = null) = MDC.put(key, value ?: defaultValue)
 }
