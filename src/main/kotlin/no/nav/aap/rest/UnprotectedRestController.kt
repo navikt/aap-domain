@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.lang.annotation.Documented
 import kotlin.annotation.AnnotationRetention.RUNTIME
+import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.annotation.AnnotationTarget.TYPE
 
 
@@ -15,7 +16,7 @@ import kotlin.annotation.AnnotationTarget.TYPE
 @Unprotected
 @Documented
 @ConditionalOnNotProd
-@Target(TYPE)
+@Target(TYPE, CLASS)
 @Retention(RUNTIME)
 annotation class UnprotectedRestController(vararg val value: String = [],
                                            val produces: Array<String> = [APPLICATION_JSON_VALUE])
