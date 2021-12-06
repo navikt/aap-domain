@@ -1,12 +1,12 @@
 package no.nav.aap.rest.tokenx
 
 import no.nav.aap.util.AuthContext
-import no.nav.aap.util.AuthContext.Companion
 import no.nav.aap.util.LoggerUtil
-import no.nav.boot.conditionals.EnvUtil
+import no.nav.aap.util.StringExtensions.asBearer
+import no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
-import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
@@ -26,12 +26,12 @@ class TokenXFilterFunction(
         log.trace("Sjekker token exchange for {}", url)
         val cfg = matcher.findProperties(configs, url)
         if (cfg != null && authContext.isAuthenticated()) {
-            log.trace(EnvUtil.CONFIDENTIAL, "Gjør token exchange for {} med konfig {}", url, cfg)
+            log.trace(CONFIDENTIAL, "Gjør token exchange for {} med konfig {}", url, cfg)
             val token = service.getAccessToken(cfg).accessToken
             log.trace("Token exchange for {} OK", url)
             secureLog.trace("Token er {}", token)
             return next.exchange(
-                    ClientRequest.from(req).header(HttpHeaders.AUTHORIZATION, AuthContext.bearerToken(token)).build())
+                    ClientRequest.from(req).header(AUTHORIZATION, token.asBearer()).build())
         }
         log.trace("Ingen token exchange for {}", url)
         return next.exchange(ClientRequest.from(req).build())

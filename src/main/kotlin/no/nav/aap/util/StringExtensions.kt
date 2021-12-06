@@ -23,5 +23,5 @@ object StringExtensions {
     fun String.asBearer() = "Bearer ".plus(this)
     fun String.limit(bytes: ByteArray?, max: Int = DEFAULT_LENGTH) = Arrays.toString(bytes).limit(max)
     fun String.mask(mask: String = "*") = replace(("[^\\.]").toRegex(), mask)
-    fun String.encode(charset: Charset= UTF_8) = Base64.getEncoder().encodeToString(toByteArray(charset))
+    fun String.encode(charset: Charset = UTF_8) = Base64.getEncoder().encodeToString(toByteArray(charset))
 }
