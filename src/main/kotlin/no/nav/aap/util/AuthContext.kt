@@ -16,8 +16,4 @@ class AuthContext(private val ctxHolder: TokenValidationContextHolder) {
     private fun getToken(issuer: String) = context?.getJwtToken(issuer)?.tokenAsString
     private fun claimSet(issuer: String) = context?.getClaims(issuer)
     override fun toString() = "${javaClass.simpleName} [ctxHolder=$ctxHolder]"
-
-    companion object {
-        fun bearerToken(token: String) = "Bearer " + token
-    }
 }
