@@ -5,6 +5,6 @@ import java.time.LocalDateTime.ofInstant
 import java.time.ZoneId.systemDefault
 import java.time.format.DateTimeFormatter.ofPattern
 
-object TimeUtil {
+object TimeExtensions {
     fun Long.format(fmt: String = "yyyy-MM-dd HH:mm:ss") =  ofInstant(ofEpochMilli(this), systemDefault()).format(ofPattern(fmt))
 }

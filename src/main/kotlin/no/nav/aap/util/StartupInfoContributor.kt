@@ -1,6 +1,6 @@
 package no.nav.aap.util
 
-import no.nav.aap.util.TimeUtil.format
+import no.nav.aap.util.TimeExtensions.format
 import org.springframework.boot.actuate.info.Info
 import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.context.ApplicationContext
