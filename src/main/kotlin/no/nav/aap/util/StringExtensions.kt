@@ -1,8 +1,5 @@
 package no.nav.aap.util
 
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets.UTF_8
-import java.util.*
 import kotlin.math.min
 
 object StringExtensions {
@@ -21,6 +18,6 @@ object StringExtensions {
     }
 
     fun String.asBearer() = "Bearer ".plus(this)
-    fun String.limit(bytes: ByteArray?, max: Int = DEFAULT_LENGTH) = Arrays.toString(bytes).limit(max)
+    fun String.limit(bytes: ByteArray, max: Int = DEFAULT_LENGTH) = String(bytes).limit(max)
     fun String.mask(mask: String = "*") = replace(("[^\\.]").toRegex(), mask)
 }
