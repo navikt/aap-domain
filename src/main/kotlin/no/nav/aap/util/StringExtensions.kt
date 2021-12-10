@@ -8,9 +8,9 @@ import kotlin.math.min
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
 
-    fun String.partialMask() : String {
+    fun String.partialMask(mask: Char = '*') : String {
         val start = length.div(2)
-        return replaceRange(start +1,length ,"*".repeat(length - start -1))
+        return replaceRange(start +1,length ,mask.toString().repeat(length - start -1))
     }
 
     fun String.limit( max: Int = DEFAULT_LENGTH) : String  {
@@ -23,5 +23,4 @@ object StringExtensions {
     fun String.asBearer() = "Bearer ".plus(this)
     fun String.limit(bytes: ByteArray?, max: Int = DEFAULT_LENGTH) = Arrays.toString(bytes).limit(max)
     fun String.mask(mask: String = "*") = replace(("[^\\.]").toRegex(), mask)
-    fun String.encode(charset: Charset = UTF_8) = Base64.getEncoder().encodeToString(toByteArray(charset))
 }
