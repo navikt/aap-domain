@@ -15,7 +15,7 @@
     <properties>
         <i18n.version>1.29</i18n.version>
         <java.version>17</java.version>
-        <kotlin.version>1.6.0</kotlin.version>
+        <kotlin.version>1.6.10</kotlin.version>
         <token.validation.version>1.3.9</token.validation.version>
     </properties>
     <dependencies>
