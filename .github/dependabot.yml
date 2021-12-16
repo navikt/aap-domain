@@ -26,5 +26,5 @@ updates:
   schedule:
     interval: daily
     timezone: "UTC+1"
-    time: "12:45"
+    time: "12:50"
   open-pull-requests-limit: 10
