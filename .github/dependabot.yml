@@ -9,7 +9,7 @@ updates:
 - package-ecosystem: github-actions
     directory: "/"
     schedule:
-       time: "11:00"
+      time: "11:00"
       interval: daily
     open-pull-requests-limit: 10
 - package-ecosystem: maven
