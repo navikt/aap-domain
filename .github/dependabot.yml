@@ -5,24 +5,24 @@ registries:
     url: https://maven.pkg.github.com/navikt/aap-domain
     username: x-access-token
     password: ${{ secrets.READER_TOKEN }}
- boot-cluster-conditionals :
+  boot-cluster-conditionals :
     type: maven-repository
     url: https://maven.pkg.github.com/navikt/boot-cluster-conditionals
     username: x-access-token
     password: ${{ secrets.READER_TOKEN }}   
 updates:
 - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      time: "13:00"
-      interval: daily
-    open-pull-requests-limit: 10
+  directory: "/"
+  schedule:
+     time: "13:40"
+     interval: daily
+  open-pull-requests-limit: 10
 - package-ecosystem: maven
   directory: "/"
   registries:
-      - aap-domain
-      - boot-cluster-conditionals
+     - aap-domain
+     - boot-cluster-conditionals
   schedule:
     interval: daily
-    time: "13:00"
+    time: "13:40"
   open-pull-requests-limit: 10
