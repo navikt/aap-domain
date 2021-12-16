@@ -1,4 +1,10 @@
 version: 2
+registries:
+  aap-domain :
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/aap-domain
+    username: x-access-token
+    password: ${{ secrets.GITHUB_TOKEN }}
 updates:
 - package-ecosystem: github-actions
     directory: "/"
@@ -7,7 +13,9 @@ updates:
     open-pull-requests-limit: 10
 - package-ecosystem: maven
   directory: "/"
+  registries:
+      - aap-domain
   schedule:
     interval: daily
-    time: "12:25"
+    time: "10:50"
   open-pull-requests-limit: 10
