@@ -9,7 +9,6 @@ updates:
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
-     time: "14:45"
      interval: daily
   open-pull-requests-limit: 10
 - package-ecosystem: maven
@@ -18,5 +17,4 @@ updates:
      - boot-cluster-conditionals
   schedule:
     interval: daily
-    time: "14:45"
   open-pull-requests-limit: 10
