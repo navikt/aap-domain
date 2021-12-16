@@ -26,7 +26,7 @@
         <dependency>
             <groupId>no.nav.boot</groupId>
             <artifactId>boot-conditionals</artifactId>
-            <version>2.0.14</version>
+            <version>2.0.16</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>
