@@ -1,10 +1,5 @@
 version: 2
 registries:
-  aap-domain :
-    type: maven-repository
-    url: https://maven.pkg.github.com/navikt/aap-domain
-    username: x-access-token
-    password: ${{ secrets.READER_TOKEN }}
   boot-cluster-conditionals :
     type: maven-repository
     url: https://maven.pkg.github.com/navikt/boot-cluster-conditionals
@@ -20,7 +15,6 @@ updates:
 - package-ecosystem: maven
   directory: "/"
   registries:
-     - aap-domain
      - boot-cluster-conditionals
   schedule:
     interval: daily
