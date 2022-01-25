@@ -1,5 +1,6 @@
 package no.nav.aap.util
 
+import java.util.*
 import kotlin.math.min
 
 object StringExtensions {
@@ -20,4 +21,7 @@ object StringExtensions {
     fun String.asBearer() = "Bearer ".plus(this)
     fun String.limit(bytes: ByteArray, max: Int = DEFAULT_LENGTH) = String(bytes).limit(max)
     fun String.mask(mask: String = "*") = replace(("[^\\.]").toRegex(), mask)
+
+    fun <T> Optional<T>.unwrap(): T? = orElse(null)
+
 }
