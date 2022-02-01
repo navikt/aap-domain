@@ -1,10 +1,15 @@
 package no.nav.aap.util
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
 import kotlin.math.min
 
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
+
+    fun String.toLocalDate() = LocalDate.parse(this, ISO_LOCAL_DATE)    
+
 
     fun String.partialMask(mask: Char = '*') : String {
         val start = length.div(2)
