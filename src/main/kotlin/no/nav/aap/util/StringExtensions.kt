@@ -8,7 +8,7 @@ import kotlin.math.min
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
 
-    fun String.toLocalDate() = LocalDate.parse(this, ISO_LOCAL_DATE)    
+    fun String.toLocalDate() = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
     fun String.partialMask(mask: Char = '*') : String {
