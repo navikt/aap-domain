@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import reactor.core.publisher.Mono
-import java.util.*
 
 class TokenXFilterFunction(
         private val configs: ClientConfigurationProperties,
@@ -21,25 +20,21 @@ class TokenXFilterFunction(
         private val matcher: ClientConfigurationPropertiesMatcher,
         private val authContext: AuthContext) : ExchangeFilterFunction {
     private val log = LoggerUtil.getLogger(javaClass)
-    private val secureLog = LoggerUtil.getSecureLogger()
 
     override fun filter(req: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
         val url = req.url()
-        log.trace("Sjekker token exchange for {}", url)
-        val cfg = matcher.findProperties(configs, url).unwrap()
+        log.trace("Sjekker token exchange for $url mot $configs")
+        val cfg = matcher.findProperties(configs, url).orElse(null)
         if (cfg != null && authContext.isAuthenticated()) {
             log.trace(CONFIDENTIAL, "Gjør token exchange for {} med konfig {}", url, cfg)
             val token = service.getAccessToken(cfg).accessToken
             log.trace("Token exchange for {} OK", url)
-            secureLog.trace("Token er {}", token)
-            return next.exchange(
-                    ClientRequest.from(req).header(AUTHORIZATION, token.asBearer()).build())
+            log.trace(CONFIDENTIAL,"Token er {}", token)
+            return next.exchange(ClientRequest.from(req).header(AUTHORIZATION, token.asBearer()).build())
         }
         log.trace("Ingen token exchange for {}", url)
         return next.exchange(ClientRequest.from(req).build())
     }
-
-    fun <T> Optional<T>.unwrap(): T? = orElse(null)
 
     override fun toString() =
         "${javaClass.simpleName} [[configs=$configs,authContext=$authContext,service=$service,matcher=$matcher]"
