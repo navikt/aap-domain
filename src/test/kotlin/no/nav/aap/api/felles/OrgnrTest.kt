@@ -20,7 +20,7 @@ class OrgnrTest {
     }
     @Test
     fun gyldig() {
-        serdeser(OrgNummer("874652202"),true)
+        serdeser(TestClass(OrgNummer("874652202")),true)
     }
 
 
@@ -32,4 +32,6 @@ class OrgnrTest {
         if (print) println(deser)
         assertThat(a).isEqualTo(deser)
     }
+
+    data class TestClass(val orgnr: OrgNummer)
 }

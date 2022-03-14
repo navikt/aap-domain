@@ -1,6 +1,8 @@
 package no.nav.aap.api.felles
 
-data class OrgNummer(val orgnr: String) {
+import com.fasterxml.jackson.annotation.JsonValue
+
+data class OrgNummer(@get:JsonValue val orgnr: String) {
 
    init {
     require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
