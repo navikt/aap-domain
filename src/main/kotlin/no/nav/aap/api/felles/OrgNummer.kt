@@ -1,6 +1,6 @@
 package no.nav.aap.api.felles
 
-class OrgNummer(val orgnr: String) {
+data class OrgNummer(val orgnr: String) {
 
    init {
     require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
