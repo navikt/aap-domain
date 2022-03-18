@@ -41,16 +41,15 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                             .build())
             }
 
-        fun headerFilterFunction(key: String, value: String) =
+        fun generellFilterFunction(key: String, value: () -> String) =
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
                 next.exchange(
                         ClientRequest.from(req)
-                            .header(key, value)
+                            .header(key, value.invoke())
                             .build())
             }
 
-        fun consumerFilterFunction() = headerFilterFunction(Constants.NAV_CONSUMER_ID, Constants.AAP)
-
-        fun temaFilterFunction() = headerFilterFunction(Constants.TEMA, Constants.AAP)
+        fun consumerFilterFunction() = generellFilterFunction(Constants.NAV_CONSUMER_ID) { Constants.AAP }
+        fun temaFilterFunction() = generellFilterFunction(Constants.TEMA) { Constants.AAP }
     }
 }
