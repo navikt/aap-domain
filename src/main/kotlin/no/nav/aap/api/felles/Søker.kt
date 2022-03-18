@@ -12,7 +12,7 @@ data class Navn(val fornavn: String?, val mellomnavn: String?, val etternavn: St
     @JsonIgnore
     val navn = listOfNotNull(fornavn, mellomnavn, etternavn).joinToString(separator = " ").trim()
 }
-data class Fødselsnummer(@JvmField @JsonValue val fnr: String) {
+data class Fødselsnummer(@get:JsonValue val fnr: String) {
     override fun toString() = "${javaClass.simpleName} [fnr=${fnr.partialMask()}]"
 }
 

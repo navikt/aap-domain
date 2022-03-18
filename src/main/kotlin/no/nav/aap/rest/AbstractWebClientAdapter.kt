@@ -41,12 +41,14 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                             .build())
             }
 
-        fun temaFilterFunction() =
+        fun headerFilterFunction(key: String, value: String) =
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
                 next.exchange(
                         ClientRequest.from(req)
-                            .header(Constants.TEMA, Constants.AAP)
+                            .header(key, value)
                             .build())
             }
+
+        fun temaFilterFunction() = headerFilterFunction(Constants.TEMA, Constants.AAP)
     }
 }
