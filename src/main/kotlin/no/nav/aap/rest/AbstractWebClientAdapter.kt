@@ -49,6 +49,8 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                             .build())
             }
 
+        fun consumerFilterFunction() = headerFilterFunction(Constants.NAV_CONSUMER_ID, Constants.AAP)
+
         fun temaFilterFunction() = headerFilterFunction(Constants.TEMA, Constants.AAP)
     }
 }
