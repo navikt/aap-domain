@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 
 class AuthContext(private val ctxHolder: TokenValidationContextHolder) {
-    fun getSubject(issuer: String = IDPORTEN) = getClaim(issuer, "pid")
+    fun getSubject(issuer: String = IDPORTEN) = getClaim(issuer, "pid") ?: "<No subject>"
     fun getFnr(issuer: String = IDPORTEN) = getSubject(issuer)?.let { Fødselsnummer(it) } ?: throw JwtTokenUnauthorizedException("Ikke autentisert")
     fun getClaim(issuer: String, claim: String?) = claimSet(issuer)?.getStringClaim(claim)
     fun isAuthenticated(issuer: String = IDPORTEN) = getToken(issuer) != null
