@@ -10,8 +10,8 @@ import java.util.*
 object TimeExtensions {
     fun Long.format(fmt: String = "yyyy-MM-dd HH:mm:ss") =  ofInstant(ofEpochMilli(this), systemDefault()).format(ofPattern(fmt))
 
-    fun Date.toLocalDateTime()  =
-        ofEpochMilli(this.getTime())
+    fun Date.toLocalDateTime(): LocalDateTime =
+        ofEpochMilli(this.time)
             .atZone(systemDefault())
             .toLocalDateTime()
 }

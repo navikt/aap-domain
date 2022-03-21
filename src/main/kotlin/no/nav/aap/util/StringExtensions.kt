@@ -8,7 +8,7 @@ import kotlin.math.min
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
 
-    fun String.toLocalDate() = LocalDate.parse(this, ISO_LOCAL_DATE)
+    fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
     fun String.partialMask(mask: Char = '*') : String {
@@ -18,8 +18,9 @@ object StringExtensions {
 
     fun String.limit( max: Int = DEFAULT_LENGTH) : String  {
         val ny = substring(0, min(max, length))
-        if (ny.length != length)
-               return ny.plus(" (").plus(length - max).plus(" more chars...)")
+        if (ny.length != length) {
+            return ny.plus(" (").plus(length - max).plus(" more chars...)")
+        }
         return ny
     }
 

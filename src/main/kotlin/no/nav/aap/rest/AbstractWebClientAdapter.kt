@@ -2,7 +2,9 @@ package no.nav.aap.rest
 
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants
+import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.MDCUtil
+import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
@@ -13,14 +15,17 @@ import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
 
 abstract class AbstractWebClientAdapter(protected val webClient: WebClient, protected open val cfg: AbstractRestConfig) : RetryAware, Pingable {
+
+    protected val log: Logger = LoggerUtil.getLogger(javaClass)
+
     override fun ping()  {
         webClient
             .get()
             .uri(pingEndpoint())
             .accept(APPLICATION_JSON, TEXT_PLAIN)
             .retrieve()
-            .onStatus({ obj: HttpStatus -> obj.isError }) { obj: ClientResponse -> obj.createException() }
             .toBodilessEntity()
+            .doOnError { t: Throwable -> log.warn("Ping oppslag  feilet", t) }
             .block()
     }
 
