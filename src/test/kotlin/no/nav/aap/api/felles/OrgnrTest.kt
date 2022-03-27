@@ -23,7 +23,6 @@ class OrgnrTest {
         serdeser(TestClass(OrgNummer("874652202")),true)
     }
 
-
     private fun serdeser(a: Any, print: Boolean = false) {
         mapper.registerKotlinModule()
         val ser = mapper.writeValueAsString(a)
