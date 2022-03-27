@@ -1,6 +1,7 @@
 package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 import com.fasterxml.jackson.annotation.JsonValue
 import com.neovisionaries.i18n.CountryCode
 import no.nav.aap.util.StringExtensions.partialMask
@@ -24,6 +25,6 @@ data class Periode(val fom: LocalDate, val tom: LocalDate?) {
 data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val periode: Periode) {
     val fulltNavn = søker.navn?.navn
 }
-data class Adresse private constructor(val adressenavn: String?, val husbokstav: String?, val husnummer: String?, val postnummer: PostNummer?) {
+data class Adresse private constructor(val adressenavn: String?, val husbokstav: String?, val husnummer: String?, @JsonUnwrapped val postnummer: PostNummer?) {
     val fullAdresse = listOfNotNull(adressenavn,husbokstav,husnummer,postnummer?.postnr,postnummer?.poststed).joinToString()
 }
