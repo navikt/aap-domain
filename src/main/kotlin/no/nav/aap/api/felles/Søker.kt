@@ -19,12 +19,15 @@ data class Fødselsnummer(@get:JsonValue val fnr: String) {
 }
 
 data class Periode(val fom: LocalDate, val tom: LocalDate?) {
+    @JsonIgnore
     val varighetDager = tom?.let { Duration.between(fom.atStartOfDay(), it.atStartOfDay()).toDays() } ?: -1
 }
 
 data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val periode: Periode) {
+    @JsonIgnore
     val fulltNavn = søker.navn?.navn
 }
 data class Adresse (val adressenavn: String?, val husbokstav: String?, val husnummer: String?, @JsonUnwrapped val postnummer: PostNummer?) {
-    val fullAdresse = listOfNotNull(adressenavn,husbokstav,husnummer,postnummer?.postnr,postnummer?.poststed).joinToString()
+    @JsonIgnore
+    val fullAdresse = listOfNotNull(adressenavn,husbokstav,husnummer,postnummer?.postnr,postnummer?.poststed).joinToString(separator = " ")
 }
