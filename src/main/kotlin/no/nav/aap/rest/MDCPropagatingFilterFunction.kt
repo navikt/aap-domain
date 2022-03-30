@@ -1,5 +1,6 @@
 package no.nav.aap.rest
 
+import no.nav.aap.util.LoggerUtil
 import org.slf4j.MDC
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ClientResponse
@@ -8,13 +9,13 @@ import org.springframework.web.reactive.function.client.ExchangeFunction
 import reactor.core.publisher.Mono
 
 class MDCPropagatingFilterFunction : ExchangeFilterFunction {
+    private val log = LoggerUtil.getLogger(javaClass)
     override fun filter(request: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
-            // here runs on main(request's) thread
             val map  = MDC.getCopyOfContextMap()
             return next.exchange(request)
-                .log("Exchanging MDC values")
                 .doOnNext {
                     if (map != null) {
+                        log.trace("Setter tilbake map")
                         MDC.setContextMap(map)
                     }
                 }
