@@ -15,7 +15,7 @@ class MDCPropagatingFilterFunction : ExchangeFilterFunction {
             return next.exchange(request)
                 .doOnNext {
                     if (map != null) {
-                        log.trace("Setter tilbake map")
+                        log.trace("Setter  map fo neste tråd")
                         MDC.setContextMap(map)
                     }
                 }
