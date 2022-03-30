@@ -13,13 +13,13 @@ class MDCPropagatingFilterFunction(private val holder: TokenValidationContextHol
     private val log = LoggerUtil.getLogger(javaClass)
     override fun filter(request: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
             val map  = MDC.getCopyOfContextMap()
-            val current = holder.tokenValidationContext
+           // val current = holder.tokenValidationContext
             return next.exchange(request)
                 .doOnNext {
                     if (map != null) {
                         log.trace("Setter map og token for neste")
                         MDC.setContextMap(map)
-                        holder.tokenValidationContext = current
+            //            holder.tokenValidationContext = current
                     }
                 }
     }
