@@ -14,5 +14,5 @@ object Constants {
     const val AAD = "aad"
     const val TEST = "test"
     const val NAV_PERSON_IDENT = "Nav-Personident"
-
+    const val NORG = "NORG"
 }
