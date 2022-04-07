@@ -2,8 +2,17 @@ package no.nav.aap.rest
 
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants
+import no.nav.aap.util.Constants.AAP
+import no.nav.aap.util.Constants.NAV_CONSUMER_ID
+import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.MDCUtil
+import no.nav.aap.util.MDCUtil.NAV_CALL_ID
+import no.nav.aap.util.MDCUtil.NAV_CALL_ID1
+import no.nav.aap.util.MDCUtil.NAV_CALL_ID2
+import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
+import no.nav.aap.util.MDCUtil.callId
+import no.nav.aap.util.MDCUtil.consumerId
 import org.slf4j.Logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -38,11 +47,11 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
                 next.exchange(
                         ClientRequest.from(req)
-                            .header(MDCUtil.NAV_CONSUMER_ID, MDCUtil.consumerId(defaultConsumerId))
-                            .header(MDCUtil.NAV_CONSUMER_ID2, MDCUtil.consumerId(defaultConsumerId))
-                            .header(MDCUtil.NAV_CALL_ID, MDCUtil.callId())
-                            .header(MDCUtil.NAV_CALL_ID1, MDCUtil.callId())
-                            .header(MDCUtil.NAV_CALL_ID2, MDCUtil.callId())
+                            .header(NAV_CONSUMER_ID, consumerId(defaultConsumerId))
+                            .header(NAV_CONSUMER_ID2, consumerId(defaultConsumerId))
+                            .header(NAV_CALL_ID, callId())
+                            .header(NAV_CALL_ID1, callId())
+                            .header(NAV_CALL_ID2, callId())
                             .build())
             }
 
@@ -54,7 +63,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
                             .build())
             }
 
-        fun consumerFilterFunction() = generellFilterFunction(Constants.NAV_CONSUMER_ID) { Constants.AAP }
-        fun temaFilterFunction() = generellFilterFunction(Constants.TEMA) { Constants.AAP }
+        fun consumerFilterFunction() = generellFilterFunction(NAV_CONSUMER_ID) { AAP }
+        fun temaFilterFunction() = generellFilterFunction(TEMA) { AAP }
     }
 }

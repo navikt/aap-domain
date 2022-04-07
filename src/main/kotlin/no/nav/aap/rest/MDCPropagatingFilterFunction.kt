@@ -9,17 +9,15 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import reactor.core.publisher.Mono
 
-class MDCPropagatingFilterFunction(private val holder: TokenValidationContextHolder) : ExchangeFilterFunction {
+class MDCPropagatingFilterFunction : ExchangeFilterFunction {
     private val log = LoggerUtil.getLogger(javaClass)
     override fun filter(request: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
             val map  = MDC.getCopyOfContextMap()
-           // val current = holder.tokenValidationContext
             return next.exchange(request)
                 .doOnNext {
                     if (map != null) {
                         log.trace("Setter map og token for neste")
                         MDC.setContextMap(map)
-            //            holder.tokenValidationContext = current
                     }
                 }
     }

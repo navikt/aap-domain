@@ -27,7 +27,7 @@ data class UtenlandsSøknadKafka(val søker: Søker, val land: CountryCode, val 
     @JsonIgnore
     val fulltNavn = søker.navn?.navn
 }
-data class Adresse (val adressenavn: String?, val husbokstav: String?, val husnummer: String?, @JsonUnwrapped val postnummer: PostNummer?) {
+data class Adresse (val adressenavn: String?, val husbokstav: String?, val husnummer: String?, val postnummer: PostNummer?) {
     @JsonIgnore
     val fullAdresse = listOfNotNull(adressenavn,husbokstav,husnummer,postnummer?.postnr,postnummer?.poststed).joinToString(separator = " ")
 }

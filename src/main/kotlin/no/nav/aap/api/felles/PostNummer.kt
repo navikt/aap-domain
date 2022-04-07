@@ -1,6 +1,5 @@
 package no.nav.aap.api.felles
 
-import com.fasterxml.jackson.annotation.JsonValue
 import org.springframework.core.io.ClassPathResource
 
 data class PostNummer private constructor (val postnr: String,val poststed: String?)  {
