@@ -36,7 +36,7 @@ enum class VariantFormat {
     FULLVERSJON
 }
 enum class Filtype {
-    PDFA,
+    PDFA,JSON,JPG
 
 }
 data class Sak(
