@@ -27,7 +27,7 @@ data class Dokument(
 )
 
 data class DokumentVariant(val filtype: String, val fysiskDokument: String, val variantformat: String) {
-    constructor( filtype: Filtype = PDFA, fysiskDokument: String, val variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
+    constructor( filtype: Filtype = PDFA, fysiskDokument: String, variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
         override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=$fysiskDokument.length bytes]"
 }
 
