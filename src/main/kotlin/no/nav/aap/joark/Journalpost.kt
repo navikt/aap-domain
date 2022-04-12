@@ -1,6 +1,8 @@
 package no.nav.aap.joark
 
 import no.nav.aap.api.felles.Fødselsnummer
+import no.nav.aap.joark.Filtype.PDFA
+import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
 
 data class Journalpost(
@@ -24,10 +26,19 @@ data class Dokument(
     val dokumentVarianter: List<DokumentVariant> = mutableListOf()
 )
 
-data class DokumentVariant(val filtype: String = "PDFA", val fysiskDokument: String, val variantformat: String = "ARKIV") {
+data class DokumentVariant(val filtype: Filtype = PDFA, val fysiskDokument: String, val variantformat: VariantFormat = ARKIV) {
         override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=$fysiskDokument.length bytes]"
 }
 
+enum class VariantFormat {
+    ORIGINAL,
+    ARKIV,
+    FULLVERSJON
+}
+enum class Filtype {
+    PDFA,
+
+}
 data class Sak(
     val sakstype: Sakstype,
     val fagsaksystem: FagsaksSystem? = null,
