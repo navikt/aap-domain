@@ -26,7 +26,8 @@ data class Dokument(
     val dokumentVarianter: List<DokumentVariant> = mutableListOf()
 )
 
-data class DokumentVariant(val filtype: Filtype = PDFA, val fysiskDokument: String, val variantformat: VariantFormat = ARKIV) {
+data class DokumentVariant(val filtype: String, val fysiskDokument: String, val variantformat: String) {
+    constructor( filtype: Filtype = PDFA, fysiskDokument: String, val variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
         override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=$fysiskDokument.length bytes]"
 }
 
