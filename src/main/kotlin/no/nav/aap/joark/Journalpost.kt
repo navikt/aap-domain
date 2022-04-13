@@ -4,6 +4,9 @@ import no.nav.aap.api.felles.Fødselsnummer
 import no.nav.aap.joark.Filtype.PDFA
 import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
+import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
 
 data class Journalpost(
     val journalposttype: String = "INNGAAENDE",
@@ -36,9 +39,12 @@ enum class VariantFormat {
     ARKIV,
     FULLVERSJON
 }
-enum class Filtype {
-    PDFA,JSON,JPG
-
+enum class Filtype(val contentType: String) {
+    PDFA(APPLICATION_PDF_VALUE),
+    JSON(APPLICATION_JSON_VALUE)
+    fun of(contentType: String) = values()
+        .filter { it.contentType == contentType }
+        .first()
 }
 data class Sak(
     val sakstype: Sakstype,
