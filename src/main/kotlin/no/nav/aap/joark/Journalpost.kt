@@ -42,9 +42,13 @@ enum class VariantFormat {
 enum class Filtype(val contentType: String) {
     PDFA(APPLICATION_PDF_VALUE),
     JSON(APPLICATION_JSON_VALUE)
-    fun of(contentType: String) = values()
-        .filter { it.contentType == contentType }
-        .first()
+    companion object {
+        fun of(contentType: String) = values()
+            .filter { it.contentType == contentType }
+            .first()
+    }
+
+
 }
 data class Sak(
     val sakstype: Sakstype,
