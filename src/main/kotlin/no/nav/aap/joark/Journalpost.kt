@@ -4,7 +4,6 @@ import no.nav.aap.api.felles.Fødselsnummer
 import no.nav.aap.joark.Filtype.PDFA
 import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
-import org.springframework.http.MediaType
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
 
@@ -41,14 +40,12 @@ enum class VariantFormat {
 }
 enum class Filtype(val contentType: String) {
     PDFA(APPLICATION_PDF_VALUE),
-    JSON(APPLICATION_JSON_VALUE)
+    JSON(APPLICATION_JSON_VALUE);
     companion object {
         fun of(contentType: String) = values()
             .filter { it.contentType == contentType }
             .first()
     }
-
-
 }
 data class Sak(
     val sakstype: Sakstype,
