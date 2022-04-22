@@ -6,6 +6,7 @@ import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
+import java.util.*
 
 data class Journalpost(
     val journalposttype: String = "INNGAAENDE",
@@ -30,14 +31,16 @@ data class Dokument(
 
 data class DokumentVariant private constructor(val filtype: String, val fysiskDokument: String, val variantformat: String) {
     constructor( filtype: Filtype = PDFA, fysiskDokument: String, variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
-        override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=$fysiskDokument.length bytes]"
-}
+        override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=$fysiskDokument.length bytes]" }
 
 enum class VariantFormat {
     ORIGINAL,
     ARKIV,
     FULLVERSJON
 }
+
+fun ByteArray.asPDFVariant() = DokumentVariant(PDFA, Base64.getEncoder().encodeToString(this),ARKIV)
+
 enum class Filtype(val contentType: String) {
     PDFA(APPLICATION_PDF_VALUE),
     JSON(APPLICATION_JSON_VALUE);
