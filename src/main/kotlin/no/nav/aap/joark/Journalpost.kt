@@ -31,7 +31,7 @@ data class Dokument(
 
 data class DokumentVariant private constructor(val filtype: String, val fysiskDokument: String, val variantformat: String) {
     constructor( filtype: Filtype = PDFA, fysiskDokument: String, variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
-        override fun toString() = "$javaClass.simpleName [filtype=$filtype,variantformat=$variantformat,fysiskDokument=${fysiskDokument.length} bytes]" }
+        override fun toString() = "${javaClass.simpleName} [filtype=$filtype,variantformat=$variantformat,fysiskDokument=${fysiskDokument.length} bytes]" }
 
 enum class VariantFormat {
     ORIGINAL,
