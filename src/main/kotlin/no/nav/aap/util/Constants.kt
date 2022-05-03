@@ -1,8 +1,10 @@
 package no.nav.aap.util
 
 object Constants {
+    const val NORG = "norg"
+    const val ORGANISASJON = "organisasjon"
     const val JOARK = "joark"
-    const val INNTEKTSKOMPONENT = "INNTEKTSKOMPONENT"
+    const val INNTEKTSKOMPONENT = "inntektskomponent"
     const val PDL_USER = "pdl"
     const val PDL_SYSTEM = "pdls"
     const val STS = "sts"
@@ -14,5 +16,4 @@ object Constants {
     const val AAD = "aad"
     const val TEST = "test"
     const val NAV_PERSON_IDENT = "Nav-Personident"
-    const val NORG = "NORG"
 }
