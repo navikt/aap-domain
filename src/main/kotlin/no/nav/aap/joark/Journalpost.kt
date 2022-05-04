@@ -1,6 +1,7 @@
 package no.nav.aap.joark
 
 import no.nav.aap.api.felles.Fødselsnummer
+import no.nav.aap.api.felles.SkjemaType
 import no.nav.aap.joark.Filtype.PDFA
 import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
@@ -23,11 +24,9 @@ data class Journalpost(
 
 data class Tilleggsopplysning(val nokkel: String, val verdi: String)
 
-data class Dokument(
-    val tittel: String,
-    val brevkode: String? = null,
-    val dokumentVarianter: List<DokumentVariant> = mutableListOf()
-)
+data class Dokument private constructor (val tittel: String, val brevkode: String? = null, val dokumentVarianter: List<DokumentVariant>) {
+    constructor(type: SkjemaType,dokumentVarianter: List<DokumentVariant>) : this(type.tittel,type.kode, dokumentVarianter)
+}
 
 data class DokumentVariant private constructor(val filtype: String, val fysiskDokument: String, val variantformat: String) {
     constructor( filtype: Filtype = PDFA, fysiskDokument: String, variantformat: VariantFormat = ARKIV) :this(filtype.name,fysiskDokument, variantformat.name)
