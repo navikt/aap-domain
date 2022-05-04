@@ -1,8 +1,10 @@
 package no.nav.aap.util
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
-import java.util.*
+import java.util.Optional
+import java.util.Base64
 import kotlin.math.min
 
 object StringExtensions {
@@ -29,5 +31,8 @@ object StringExtensions {
     fun String.mask(mask: String = "*") = replace(("[^\\.]").toRegex(), mask)
 
     fun <T> Optional<T>.unwrap(): T? = orElse(null)
+
+    fun Any.toEncodedJson(mapper: ObjectMapper) = Base64.getEncoder()
+        .encodeToString(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this).toByteArray())
 
 }
