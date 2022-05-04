@@ -3,8 +3,7 @@ package no.nav.aap.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
-import java.util.Optional
-import java.util.Base64
+import java.util.*
 import kotlin.math.min
 
 object StringExtensions {

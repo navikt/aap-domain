@@ -1,7 +1,6 @@
 package no.nav.aap.rest
 
 import no.nav.aap.util.LoggerUtil
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.slf4j.MDC
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ClientResponse

@@ -1,6 +1,6 @@
 package no.nav.aap.util
 
-import java.util.UUID
+import java.util.*
 
 object CallIdGenerator {
     fun create() = UUID.randomUUID().toString()

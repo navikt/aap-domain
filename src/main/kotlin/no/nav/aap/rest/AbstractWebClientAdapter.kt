@@ -1,12 +1,10 @@
 package no.nav.aap.rest
 
 import no.nav.aap.health.Pingable
-import no.nav.aap.util.Constants
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.NAV_CONSUMER_ID
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil
-import no.nav.aap.util.MDCUtil
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID1
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID2
@@ -14,11 +12,9 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
 import org.slf4j.Logger
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.client.ClientRequest
-import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
