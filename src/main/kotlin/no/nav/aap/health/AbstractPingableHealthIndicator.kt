@@ -1,6 +1,7 @@
 package no.nav.aap.health
 
 import org.springframework.boot.actuate.health.Health
+import org.springframework.boot.actuate.health.Health.down
 import org.springframework.boot.actuate.health.HealthIndicator
 
 abstract class AbstractPingableHealthIndicator(private val pingable: Pingable) : HealthIndicator {
@@ -12,7 +13,8 @@ abstract class AbstractPingableHealthIndicator(private val pingable: Pingable) :
             down(e)
         }
 
-    private fun up() = Health.up().withDetail(pingable.name(), pingable.pingEndpoint()).build()
-    private fun down(e: Exception)  = Health.down().withDetail(pingable.name(), pingable.pingEndpoint()).withException(e).build()
+    private fun up() = with(pingable) { Health.up().withDetail(name(), pingEndpoint()).build() }
+    private fun down(e: Exception)  = with(pingable) { down().withDetail(name(), pingEndpoint()).withException(e).build() }
+
     override fun toString() = "${javaClass.simpleName} [pingable=$pingable]"
 }

@@ -2,6 +2,9 @@ package no.nav.aap.rest
 
 import no.nav.aap.util.CallIdGenerator
 import no.nav.aap.util.MDCUtil
+import no.nav.aap.util.MDCUtil.NAV_CALL_ID
+import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
+import no.nav.aap.util.MDCUtil.toMDC
 import java.io.IOException
 import javax.servlet.Filter
 import javax.servlet.FilterChain
@@ -19,8 +22,8 @@ class HeadersToMDCFilter(val applicationName: String) : Filter {
     }
 
     private fun putValues(req: HttpServletRequest) {
-        MDCUtil.toMDC(MDCUtil.NAV_CONSUMER_ID, req.getHeader(MDCUtil.NAV_CONSUMER_ID), applicationName)
-        MDCUtil.toMDC(MDCUtil.NAV_CALL_ID, req.getHeader(MDCUtil.NAV_CALL_ID), CallIdGenerator.create())
+        toMDC(NAV_CONSUMER_ID, req.getHeader(NAV_CONSUMER_ID), applicationName)
+        toMDC(NAV_CALL_ID, req.getHeader(NAV_CALL_ID), CallIdGenerator.create())
     }
     override fun toString() = javaClass.simpleName + " [ applicationName=" + applicationName + "]"
 }

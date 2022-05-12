@@ -2,12 +2,12 @@ package no.nav.aap.rest
 
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
-import no.nav.aap.util.Constants.NAV_CONSUMER_ID
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID1
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID2
+import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
@@ -30,7 +30,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
             .accept(APPLICATION_JSON, TEXT_PLAIN)
             .retrieve()
             .toBodilessEntity()
-            .doOnError { t: Throwable -> log.warn("Ping oppslag  feilet", t) }
+            .doOnError { t: Throwable -> log.warn("Ping  feilet", t) }
             .block()
     }
 

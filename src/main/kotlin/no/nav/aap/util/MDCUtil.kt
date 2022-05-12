@@ -3,6 +3,8 @@ package no.nav.aap.util
 import org.slf4j.MDC
 
 object MDCUtil {
+    const val NAV_PERSON_IDENT = "Nav-Personident"
+    const val NAV_CONSUMER_TOKEN = "Nav-Consumer-Token"
     const val NAV_CONSUMER_ID = "Nav-Consumer-Id"
     const val NAV_CONSUMER_ID2 = "consumerId"
     const val NAV_CALL_ID = "Nav-CallId"
@@ -18,5 +20,6 @@ object MDCUtil {
         toMDC(NAV_CONSUMER_ID,defaultValue)
         defaultValue
     }
+
     fun toMDC(key: String, value: String?, defaultValue: String? = null) = MDC.put(key, value ?: defaultValue)
 }
