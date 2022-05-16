@@ -23,6 +23,17 @@ class OrgnrTest {
         serdeser(TestClass(OrgNummer("874652202")),true)
     }
 
+    @Test
+    fun fnr() {
+        Fødselsnummer("08089403198")
+        Fødselsnummer("08889403153")  // syntetisk
+    }
+    @Test
+    fun fnrFeil() {
+        assertThrows<IllegalArgumentException> { Fødselsnummer("08089403199") }
+    }
+
+
     private fun serdeser(a: Any, print: Boolean = false) {
         mapper.registerKotlinModule()
         val ser = mapper.writeValueAsString(a)
@@ -31,6 +42,7 @@ class OrgnrTest {
         if (print) println(deser)
         assertThat(a).isEqualTo(deser)
     }
+
 
     data class TestClass(val orgnr: OrgNummer)
 }

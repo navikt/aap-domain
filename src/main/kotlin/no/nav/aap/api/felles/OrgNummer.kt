@@ -8,25 +8,19 @@ data class OrgNummer(@get:JsonValue val orgnr: String) {
     require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
 }
     companion object {
-        private fun mod11OfNumberWithControlDigit(orgnr: String): Int {
-            val weights = intArrayOf(3, 2, 7, 6, 5, 4, 3, 2)
-            var sumForMod = 0
-            orgnr.indices.forEach {
-                sumForMod += (orgnr[it].code - 48) * weights[it]
-            }
-            val result = 11 - sumForMod % 11
-            return if (result == 11) 0 else result
-        }
+        private val WEIGHTS = intArrayOf(3, 2, 7, 6, 5, 4, 3, 2)
 
-        fun isValid(orgnr: String): Boolean {
-            if (orgnr.length != 9) {
-                return false
+        private fun mod11(orgnr: String) =
+             with(11 - orgnr.indices.sumOf {
+                (orgnr[it].code - 48) * WEIGHTS[it] } % 11) {
+                if (this == 11) 0 else this
             }
-            if (!(orgnr.startsWith("8") || orgnr.startsWith("9"))) {
-                return false
+
+        private fun isValid(orgnr: String) =
+            with(orgnr) {
+                length == 9 &&
+                        (startsWith("8") || startsWith("9")) &&
+                        this[8].code - 48 == mod11(substring(0, 8))
             }
-            val value = mod11OfNumberWithControlDigit(orgnr.substring(0, 8))
-            return orgnr[8].code - 48 == value
-        }
     }
 }
