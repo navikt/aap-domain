@@ -1,6 +1,5 @@
 package no.nav.aap.rest
 
-import no.nav.aap.util.URIUtil
 import no.nav.aap.util.URIUtil.uri
 import java.net.URI
 

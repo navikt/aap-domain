@@ -1,7 +1,6 @@
 package no.nav.aap.rest
 
 import no.nav.aap.util.CallIdGenerator
-import no.nav.aap.util.MDCUtil
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.toMDC
