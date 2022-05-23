@@ -11,7 +11,7 @@ import java.util.*
 
 data class Journalpost(
     val journalposttype: String = "INNGAAENDE",
-    val tema: String = AAP,
+    val tema: String = AAP.uppercase(),
     val behandlingstema: String? = null,
     val kanal: String = "NAV_NO",
     val tittel: String,
