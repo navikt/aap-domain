@@ -13,4 +13,5 @@ object Constants {
     const val IDPORTEN = "idporten"
     const val AAD = "aad"
     const val TEST = "test"
+    const val ONPREM = "onprem"
 }

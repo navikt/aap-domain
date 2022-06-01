@@ -30,7 +30,7 @@ data class Fødselsnummer(@get:JsonValue val fnr: String) {
                     1 -> throw IllegalArgumentException(fnr)
                     else -> 11 - this
                 }
-            }.also { log.trace("Kontrollsiffer er $it") }
+            }
 
     }
     override fun toString() = "${javaClass.simpleName} [fnr=${fnr.partialMask()}]"
