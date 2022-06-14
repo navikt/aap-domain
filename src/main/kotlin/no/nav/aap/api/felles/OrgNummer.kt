@@ -1,11 +1,15 @@
 package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonValue
+import no.nav.boot.conditionals.Cluster
+import no.nav.boot.conditionals.Cluster.*
 
 data class OrgNummer(@get:JsonValue val orgnr: String) {
 
    init {
-    require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
+       if (currentCluster().equals(PROD_GCP)) {
+           require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
+       }
 }
     companion object {
         private val WEIGHTS = intArrayOf(3, 2, 7, 6, 5, 4, 3, 2)
