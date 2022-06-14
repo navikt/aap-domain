@@ -7,7 +7,7 @@ import no.nav.boot.conditionals.Cluster.*
 data class OrgNummer(@get:JsonValue val orgnr: String) {
 
    init {
-       if (currentCluster().equals(PROD_GCP)) {
+       if (!currentCluster().equals(DEV_GCP)) {
            require(isValid(orgnr)) { "Ugyldig organisasjonsnummer $orgnr" }
        }
 }
