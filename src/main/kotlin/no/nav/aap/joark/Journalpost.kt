@@ -24,8 +24,8 @@ data class Journalpost(
 
 data class Tilleggsopplysning(val nokkel: String, val verdi: String)
 
-data class Dokument private constructor (val tittel: String, val brevkode: String? = null, val dokumentVarianter: List<DokumentVariant>) {
-    constructor(type: SkjemaType,dokumentVarianter: List<DokumentVariant>) : this(type.tittel,type.kode, dokumentVarianter)
+data class Dokument private constructor (val tittel: String, val brevkode: String? = null, val dokumentVarianter: List<DokumentVariant?>) {
+    constructor(type: SkjemaType,dokumentVarianter: List<DokumentVariant?>) : this(type.tittel,type.kode, dokumentVarianter)
 }
 
 data class DokumentVariant private constructor(val filtype: String, val fysiskDokument: String, val variantformat: String) {
