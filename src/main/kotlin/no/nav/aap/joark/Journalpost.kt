@@ -19,7 +19,7 @@ data class Journalpost(
     val avsenderMottaker: AvsenderMottaker,
     val bruker: Bruker,
     val sak: Sak? = null,
-    val dokumenter: List<Dokument> = mutableListOf(),
+    val dokumenter: List<Dokument?> = mutableListOf(),
     val tilleggsopplysninger: List<Tilleggsopplysning> = mutableListOf()
 )
 
