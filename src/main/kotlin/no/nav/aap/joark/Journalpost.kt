@@ -3,24 +3,31 @@ package no.nav.aap.joark
 import no.nav.aap.api.felles.Fødselsnummer
 import no.nav.aap.api.felles.SkjemaType
 import no.nav.aap.api.felles.SkjemaType.STANDARD
+import no.nav.aap.joark.Filtype.AvsenderMottaker
+import no.nav.aap.joark.Filtype.Bruker
 import no.nav.aap.joark.Filtype.PDFA
+import no.nav.aap.joark.Filtype.Sak
 import no.nav.aap.joark.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
+import org.springframework.http.MediaType.IMAGE_JPEG_VALUE
+import org.springframework.http.MediaType.IMAGE_PNG_VALUE
+import sun.jvm.hotspot.oops.CellTypeState.value
 import java.util.*
+import java.util.Base64.*
 
 data class Journalpost(
-    val journalposttype: String = "INNGAAENDE",
-    val tema: String = AAP.uppercase(),
-    val behandlingstema: String? = null,
-    val kanal: String = "NAV_NO",
-    val tittel: String,
-    val avsenderMottaker: AvsenderMottaker,
-    val bruker: Bruker,
-    val sak: Sak? = null,
-    val dokumenter: List<Dokument?> = mutableListOf(),
-    val tilleggsopplysninger: List<Tilleggsopplysning> = mutableListOf()
+        val journalposttype: String = "INNGAAENDE",
+        val tema: String = AAP.uppercase(),
+        val behandlingstema: String? = null,
+        val kanal: String = "NAV_NO",
+        val tittel: String,
+        val avsenderMottaker: AvsenderMottaker,
+        val bruker: Bruker,
+        val sak: Sak? = null,
+        val dokumenter: List<Dokument?> = mutableListOf(),
+        val tilleggsopplysninger: List<Tilleggsopplysning> = mutableListOf()
 )
 
 data class Tilleggsopplysning(val nokkel: String, val verdi: String)
@@ -40,16 +47,17 @@ enum class VariantFormat {
     ARKIV,
     FULLVERSJON
 }
-
-fun ByteArray.asPDFVariant() = DokumentVariant(PDFA, Base64.getEncoder().encodeToString(this),ARKIV)
+s
+fun ByteArray.asPDFVariant() = DokumentVariant(PDFA, getEncoder().encodeToString(this),ARKIV)
 
 enum class Filtype(val contentType: String) {
     PDFA(APPLICATION_PDF_VALUE),
+    JPEG(IMAGE_JPEG_VALUE),
+    PNG(IMAGE_PNG_VALUE),
     JSON(APPLICATION_JSON_VALUE);
     companion object {
-        fun of(contentType: String) = values()
-            .filter { it.contentType == contentType }
-            .first()
+        private val map = Filtype.values().associateBy(Filtype::contentType)
+        fun of(contentType: String) = map[contentType] ?: throw IllegalArgumentException("Content type $contentType er ikke støttet, lovlige verider er ${values()}
     }
 }
 data class Sak(
