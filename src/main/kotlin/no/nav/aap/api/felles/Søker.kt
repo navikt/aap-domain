@@ -19,7 +19,6 @@ data class Fødselsnummer(@get:JsonValue val fnr: String) {
     }
 
     companion object {
-        private val log = LoggerUtil.getLogger(javaClass)
         private val W1 = intArrayOf(2, 5, 4, 9, 8, 1, 6, 7, 3)
         private val W2 = intArrayOf(2, 3, 4, 5, 6, 7, 2, 3, 4, 5)
 
