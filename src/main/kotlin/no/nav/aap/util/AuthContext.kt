@@ -7,6 +7,7 @@ import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
 
 class AuthContext(private val ctxHolder: TokenValidationContextHolder) {
     fun getSubject(issuer: String = IDPORTEN, claim: String = "pid") = getClaim(issuer, claim)
+    fun getJti(issuer: String = IDPORTEN) = getClaim(issuer, "jti")
     fun getClaim(issuer: String, claim: String?) = claimSet(issuer)?.getStringClaim(claim)
     fun isAuthenticated(issuer: String = IDPORTEN) = getToken(issuer) != null
     private val context get() = ctxHolder.tokenValidationContext
