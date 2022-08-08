@@ -1,6 +1,7 @@
 package no.nav.aap.util
 
 import org.slf4j.MDC
+import java.util.*
 
 object MDCUtil {
     const val NAV_PERSON_IDENT = "Nav-Personident"
@@ -16,6 +17,9 @@ object MDCUtil {
         toMDC(NAV_CALL_ID,id)
         id
     }
+
+    fun callIdAsUUID() = UUID.fromString(callId())
+    
     fun consumerId(defaultValue: String): String? = MDC.get(NAV_CONSUMER_ID) ?:  run {
         toMDC(NAV_CONSUMER_ID,defaultValue)
         defaultValue
