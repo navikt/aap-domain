@@ -19,7 +19,7 @@ object MDCUtil {
     }
 
     fun callIdAsUUID() = UUID.fromString(callId())
-    
+
     fun consumerId(defaultValue: String): String? = MDC.get(NAV_CONSUMER_ID) ?:  run {
         toMDC(NAV_CONSUMER_ID,defaultValue)
         defaultValue
