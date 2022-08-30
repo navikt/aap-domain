@@ -45,6 +45,8 @@ data class Adresse (val adressenavn: String?, val husbokstav: String?, val husnu
     val fullAdresse = listOfNotNull(adressenavn,husbokstav,husnummer,postnummer?.postnr,postnummer?.poststed).joinToString(separator = " ")
 }
 
+
+
 enum class SkjemaType(val kode: String, val tittel: String) {
     UTLAND("NAV 11-03.07", "søknad om å beholde AAP ved opphold i utlandet"),
     UTLAND_ETTERSENDING("NAVe 11-03.07", "settersending til ${UTLAND.tittel}"),
