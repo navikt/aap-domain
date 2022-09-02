@@ -1,10 +1,10 @@
-package no.nav.aap.joark
+package no.nav.aap.arkiv
 
 import no.nav.aap.api.felles.Fødselsnummer
 import no.nav.aap.api.felles.SkjemaType
 import no.nav.aap.api.felles.SkjemaType.STANDARD
-import no.nav.aap.joark.Filtype.PDFA
-import no.nav.aap.joark.VariantFormat.ARKIV
+import no.nav.aap.arkiv.Filtype.PDFA
+import no.nav.aap.arkiv.VariantFormat.ARKIV
 import no.nav.aap.util.Constants.AAP
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
@@ -42,7 +42,6 @@ enum class VariantFormat {
     ARKIV,
     FULLVERSJON
 }
-fun ByteArray.asPDFVariant() = DokumentVariant(PDFA, getEncoder().encodeToString(this),ARKIV)
 
 enum class Filtype(val contentType: String) {
     PDFA(APPLICATION_PDF_VALUE),
@@ -100,3 +99,6 @@ data class AvsenderMottaker(
     val idType: String = ID_TYPE,
     val navn: String?
 )
+
+fun ByteArray.somPDFVariant() = DokumentVariant(PDFA, encode(),ARKIV)
+fun ByteArray.encode() = getEncoder().encodeToString(this)
