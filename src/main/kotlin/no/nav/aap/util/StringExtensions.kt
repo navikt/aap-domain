@@ -13,7 +13,7 @@ object StringExtensions {
     fun <T, U> List<T>.interseksjon(l: List<U>, predikat: (T, U) -> Boolean) =
         filter { m -> l.any { predikat(m, it) } }
 
-    fun <T> List<T>.flertall(str: String) = if (size == 1) str else "${str}er"
+    fun <T> List<T>.størrelse(str: String) = if (size == 1) ("$size $str") else "$size ${str}er"
     fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
