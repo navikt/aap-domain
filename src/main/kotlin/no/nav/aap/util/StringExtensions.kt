@@ -1,6 +1,7 @@
 package no.nav.aap.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.checkerframework.checker.units.qual.m
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
@@ -9,6 +10,10 @@ import kotlin.math.min
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
 
+    fun <T, U> List<T>.interseksjon(l: List<U>, predikat: (T, U) -> Boolean) =
+        filter { m -> l.any { predikat(m, it) } }
+
+    fun <T> List<T>.flertall(str: String) = if (size == 1) str else "${str}er"
     fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
