@@ -1,5 +1,6 @@
 package no.nav.aap.rest
 
+import com.sun.tools.javac.code.Attribute
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
@@ -11,6 +12,7 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
+import org.checkerframework.checker.units.qual.t
 import org.slf4j.Logger
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
@@ -18,11 +20,25 @@ import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 abstract class AbstractWebClientAdapter(protected val webClient: WebClient, protected open val cfg: AbstractRestConfig) : RetryAware, Pingable {
 
     protected val log: Logger = LoggerUtil.getLogger(javaClass)
 
+    protected inline fun  <reified T> get(clazz: Class<T>) =
+        webClient
+            .get()
+            // .uri(cf::path)
+            .accept(APPLICATION_JSON)
+            .retrieve()
+            .bodyToMono(T::class.java)
+            .doOnError { t: Throwable ->
+                log.warn("Oppslag feilet", t)
+            }
+            .doOnSuccess {
+                log.trace("Oppslag response er $it")
+            }
     override fun ping()  {
         webClient
             .get()
@@ -30,7 +46,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
             .accept(APPLICATION_JSON, TEXT_PLAIN)
             .retrieve()
             .toBodilessEntity()
-            .doOnError { t: Throwable -> log.warn("Ping  feilet", t) }
+            .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
             .block()
     }
 

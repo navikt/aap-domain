@@ -14,6 +14,8 @@ object StringExtensions {
         filter { m -> l.any { predikat(m, it) } }
 
     fun <T> List<T>.størrelse(str: String) = if (size == 1) ("$size $str") else "$size ${str}er"
+    fun <T> Array<T>.størrelse(str: String) = toList().størrelse(str)
+
     fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
