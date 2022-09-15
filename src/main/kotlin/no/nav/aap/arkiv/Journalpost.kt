@@ -16,7 +16,7 @@ data class Journalpost(
         val journalposttype: String = "INNGAAENDE",
         val tema: String = AAP.uppercase(),
         val behandlingstema: String? = null,
-        val eksternReferanseId: String,
+        val eksternReferanseId: String? = null,
         val kanal: String = "NAV_NO",
         val tittel: String,
         val avsenderMottaker: AvsenderMottaker,
