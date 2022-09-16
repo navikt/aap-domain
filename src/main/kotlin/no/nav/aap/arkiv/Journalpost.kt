@@ -10,13 +10,14 @@ import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.MediaType.APPLICATION_PDF_VALUE
 import org.springframework.http.MediaType.IMAGE_JPEG_VALUE
 import org.springframework.http.MediaType.IMAGE_PNG_VALUE
+import java.util.*
 import java.util.Base64.getEncoder
 
 data class Journalpost(
         val journalposttype: String = "INNGAAENDE",
         val tema: String = AAP.uppercase(),
         val behandlingstema: String? = null,
-        val eksternReferanseId: String? = null,
+        val eksternReferanseId: UUID,
         val kanal: String = "NAV_NO",
         val tittel: String,
         val avsenderMottaker: AvsenderMottaker,
