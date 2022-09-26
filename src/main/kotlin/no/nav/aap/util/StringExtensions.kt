@@ -19,6 +19,7 @@ object StringExtensions {
     fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
+    fun String.decap()  = replaceFirstChar { it.lowercase(Locale.getDefault())}
     fun String.partialMask(mask: Char = '*') : String {
         val start = length.div(2)
         return replaceRange(start +1,length ,mask.toString().repeat(length - start -1))
