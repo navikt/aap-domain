@@ -42,4 +42,6 @@ object StringExtensions {
     fun Any.toEncodedJson(mapper: ObjectMapper) = Base64.getEncoder()
         .encodeToString(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this).toByteArray())
 
+    fun ByteArray.encode() = Base64.getEncoder().encodeToString(this)
+
 }

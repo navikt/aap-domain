@@ -2,7 +2,6 @@ package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.StringExtensions.decap
 import no.nav.aap.util.StringExtensions.partialMask
 import java.time.Duration
