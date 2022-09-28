@@ -39,6 +39,8 @@ object StringExtensions {
 
     fun <T> Optional<T>.unwrap(): T? = orElse(null)
 
+    fun String.jsonPrettify(mapper: ObjectMapper) = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readValue(this,Any::class.java))
+
     fun Any.toEncodedJson(mapper: ObjectMapper) = Base64.getEncoder()
         .encodeToString(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this).toByteArray())
 
