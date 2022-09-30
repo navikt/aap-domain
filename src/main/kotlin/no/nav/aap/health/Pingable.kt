@@ -5,4 +5,5 @@ interface Pingable {
     fun ping()
     fun pingEndpoint(): URI
     fun name(): String
+    fun isEnabled(): Boolean
 }

@@ -50,6 +50,7 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
     override fun name() = cfg.name
     protected val baseUri = cfg.baseUri
     override fun pingEndpoint() = cfg.pingEndpoint
+    override fun isEnabled() = cfg.isEnabled
 
     companion object {
         fun correlatingFilterFunction(defaultConsumerId: String) =
