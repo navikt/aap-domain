@@ -13,7 +13,14 @@ abstract class AbstractPingableHealthIndicator(private val pingable: Pingable) :
             down(e)
         }
 
-    private fun up() = with(pingable) { Health.up().withDetail("url", pingEndpoint()).build() }
+    private fun up() = with(pingable) {
+        if (isEnabled()) {
+            Health.up().withDetail("url", pingEndpoint()).build()
+        }
+        else {
+            Health.up().withDetail("status", "${pingEndpoint()} + (disabled)").build()
+        }
+    }
     private fun down(e: Exception)  = with(pingable) { down().withDetail("url", pingEndpoint()).withException(e).build() }
 
     override fun toString() = "${javaClass.simpleName} [pingable=$pingable]"
