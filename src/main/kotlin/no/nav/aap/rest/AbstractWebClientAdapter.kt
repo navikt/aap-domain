@@ -23,20 +23,8 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
 
     protected val log: Logger = LoggerUtil.getLogger(javaClass)
 
-    protected inline fun  <reified T> get(clazz: Class<T>) =
-        webClient
-            .get()
-            // .uri(cf::path)
-            .accept(APPLICATION_JSON)
-            .retrieve()
-            .bodyToMono(T::class.java)
-            .doOnError { t: Throwable ->
-                log.warn("Oppslag feilet", t)
-            }
-            .doOnSuccess {
-                log.trace("Oppslag response er $it")
-            }
     override fun ping()  {
+        if (isEnabled()) {
         webClient
             .get()
             .uri(pingEndpoint())
@@ -45,11 +33,13 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
             .toBodilessEntity()
             .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
             .block()
+        }
     }
 
     override fun name() = cfg.name
     protected val baseUri = cfg.baseUri
     override fun pingEndpoint() = cfg.pingEndpoint
+    override fun isEnabled() = cfg.isEnabled
 
     companion object {
         fun correlatingFilterFunction(defaultConsumerId: String) =
