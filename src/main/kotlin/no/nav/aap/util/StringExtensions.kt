@@ -1,10 +1,10 @@
 package no.nav.aap.util
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.checkerframework.checker.units.qual.m
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
+import java.util.Base64.*
 import kotlin.math.min
 
 object StringExtensions {
@@ -41,9 +41,10 @@ object StringExtensions {
 
     fun String.jsonPrettify(mapper: ObjectMapper) = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readValue(this,Any::class.java))
 
-    fun Any.toEncodedJson(mapper: ObjectMapper) = Base64.getEncoder()
-        .encodeToString(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this).toByteArray())
+    fun Any.toEncodedJson(mapper: ObjectMapper) = toJson(mapper).toByteArray().encode()
 
-    fun ByteArray.encode() = Base64.getEncoder().encodeToString(this)
+    fun Any.toJson(mapper: ObjectMapper) = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
+
+    fun ByteArray.encode() = getEncoder().encodeToString(this)
 
 }
