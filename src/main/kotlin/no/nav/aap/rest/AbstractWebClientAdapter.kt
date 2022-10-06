@@ -4,6 +4,7 @@ import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil
+import no.nav.aap.util.LoggerUtil.getLogger
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID1
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID2
@@ -21,7 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient
 
 abstract class AbstractWebClientAdapter(protected val webClient: WebClient, protected open val cfg: AbstractRestConfig,private val pingClient: WebClient = webClient) : RetryAware, Pingable {
 
-    protected val log: Logger = LoggerUtil.getLogger(javaClass)
+    protected val log: Logger = getLogger(javaClass)
 
     override fun ping()  {
         if (isEnabled()) {

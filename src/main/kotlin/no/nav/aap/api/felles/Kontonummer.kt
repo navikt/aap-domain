@@ -1,7 +1,6 @@
 package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.aap.api.felles.OrgNummer.Companion
 import no.nav.boot.conditionals.Cluster.currentCluster
 import no.nav.boot.conditionals.EnvUtil.DEV_GCP
 import java.lang.Character.*
