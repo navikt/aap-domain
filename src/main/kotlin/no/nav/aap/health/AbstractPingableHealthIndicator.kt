@@ -1,27 +1,30 @@
 package no.nav.aap.health
 
 import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.Health.down
 import org.springframework.boot.actuate.health.HealthIndicator
 
 abstract class AbstractPingableHealthIndicator(private val pingable: Pingable) : HealthIndicator {
     override fun health()  =
         try {
-            pingable.ping()
-            up()
+            up(pingable.ping())
         } catch (e: Exception) {
             down(e)
         }
 
-    private fun up() = with(pingable) {
+    private fun up(status: Map<String, String>) = with(pingable) {
         if (isEnabled()) {
-            Health.up().withDetail("url", pingEndpoint()).build()
+            Health.up()
+                .withDetail("endpoint", pingEndpoint()).
+                withDetails(status)
+                .build()
         }
         else {
             Health.up().withDetail("status", "${pingEndpoint()}  (disabled)").build()
         }
     }
-    private fun down(e: Exception)  = with(pingable) { down().withDetail("url", pingEndpoint()).withException(e).build() }
-
+    private fun down(e: Exception)  = with(pingable) {
+        Health.down()
+            .withDetail("endpoint", pingEndpoint())
+            .withException(e).build() }
     override fun toString() = "${javaClass.simpleName} [pingable=$pingable]"
 }

@@ -24,22 +24,25 @@ abstract class AbstractWebClientAdapter(protected val webClient: WebClient, prot
 
     protected val log: Logger = getLogger(javaClass)
 
-    override fun ping()  {
+    override fun ping() : Map<String,String> {
         if (isEnabled()) {
-        pingClient
-            .get()
-            .uri(pingEndpoint())
-            .accept(APPLICATION_JSON, TEXT_PLAIN)
-            .retrieve()
-            .toBodilessEntity()
-            .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
-            .block()
+            pingClient
+                .get()
+                .uri(pingEndpoint())
+                .accept(APPLICATION_JSON, TEXT_PLAIN)
+                .retrieve()
+                .toBodilessEntity()
+                .doOnSuccess { log.trace("Ping ${pingEndpoint()} OK") }
+                .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
+                .block()
+            return emptyMap()
         }
+        else return emptyMap()
     }
 
     override fun name() = cfg.name
     protected val baseUri = cfg.baseUri
-    override fun pingEndpoint() = cfg.pingEndpoint
+    override fun pingEndpoint() = "${cfg.pingEndpoint}"
     override fun isEnabled() = cfg.isEnabled
 
     companion object {
