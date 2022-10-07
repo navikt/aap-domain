@@ -19,7 +19,9 @@ abstract class AbstractPingableHealthIndicator(private val pingable: Pingable) :
                 .build()
         }
         else {
-            Health.up().withDetail("status", "${pingEndpoint()}  (disabled)").build()
+            Health.up()
+                .withDetail("status", "${pingEndpoint()}  (disabled)")
+                .build()
         }
     }
     private fun down(e: Exception)  = with(pingable) {
