@@ -23,10 +23,9 @@ class TokenXFilterFunction(
 
     override fun filter(req: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
         val url = req.url()
-        log.trace("Sjekker token exchange for $url mot $configs")
         val cfg = matcher.findProperties(configs, url).orElse(null)
         if (cfg != null && authContext.isAuthenticated()) {
-            log.trace(CONFIDENTIAL, "Gjør token exchange for {} med konfig {}", url, cfg)
+            log.trace("Gjør token exchange for $url")
             val token = service.getAccessToken(cfg).accessToken
             log.trace("Token exchange for {} OK", url)
             log.trace(CONFIDENTIAL,"Token er {}", token)
