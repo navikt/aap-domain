@@ -3,6 +3,7 @@ package no.nav.aap.api.felles
 import com.fasterxml.jackson.annotation.JsonValue
 import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.LoggerUtil.getLogger
+import no.nav.boot.conditionals.Cluster
 import no.nav.boot.conditionals.Cluster.currentCluster
 import no.nav.boot.conditionals.EnvUtil.DEV_GCP
 import org.apache.commons.lang3.StringUtils.substring
@@ -13,7 +14,7 @@ data class OrgNummer(@get:JsonValue val orgnr: String) {
     protected val log: Logger = getLogger(javaClass)
 
     init {
-       if (!currentCluster().equals(DEV_GCP)) {
+       if (!currentCluster().equals(Cluster.DEV_GCP)) {
            log.trace("Vi er i cluster ${currentCluster()}, gjør validering av $orgnr")
            require(orgnr.length == 9) { "Orgnr må ha lengde 9, $orgnr har lengde ${orgnr.length} "}
            require(orgnr.startsWith("8") || orgnr.startsWith("9")) { "Orgnr må begynne med 8 eller 9"}
