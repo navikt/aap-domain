@@ -1,12 +1,9 @@
 package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.LoggerUtil.getLogger
 import no.nav.boot.conditionals.Cluster
-import no.nav.boot.conditionals.Cluster.currentCluster
-import no.nav.boot.conditionals.EnvUtil.DEV_GCP
-import org.apache.commons.lang3.StringUtils.substring
+import no.nav.boot.conditionals.Cluster.Companion.currentCluster
 import org.slf4j.Logger
 
 data class OrgNummer(@get:JsonValue val orgnr: String) {
