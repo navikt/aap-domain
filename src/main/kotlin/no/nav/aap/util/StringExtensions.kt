@@ -5,6 +5,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.*
 import java.util.Base64.*
+import java.util.Locale.*
 import kotlin.math.min
 
 object StringExtensions {
@@ -19,7 +20,9 @@ object StringExtensions {
     fun String.toLocalDate(): LocalDate = LocalDate.parse(this, ISO_LOCAL_DATE)
 
 
-    fun String.decap()  = replaceFirstChar { it.lowercase(Locale.getDefault())}
+    fun String.decap()  = replaceFirstChar { it.lowercase(getDefault())}
+    fun String.cap()  = replaceFirstChar { it.uppercase(getDefault())}
+
     fun String.partialMask(mask: Char = '*') : String {
         val start = length.div(2)
         return replaceRange(start +1,length ,mask.toString().repeat(length - start -1))
