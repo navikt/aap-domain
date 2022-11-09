@@ -2,8 +2,8 @@ package no.nav.aap.api.felles
 
 import org.springframework.core.io.ClassPathResource
 
-data class PostNummer (val postnr: String,val poststed: String?)  {
-     constructor(postnr: String) : this(postnr, poststeder[postnr] ?: "Ukjent poststed for $postnr")
+data class PostNummer (val postnr: String?,val poststed: String?)  {
+     constructor(postnr: String?) : this(postnr, poststeder[postnr] ?: "Ukjent poststed for $postnr")
 
     companion object{
        private val poststeder = try {
