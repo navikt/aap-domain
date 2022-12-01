@@ -20,7 +20,9 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
 
-abstract class AbstractWebClientAdapter(protected val webClient: WebClient, protected open val cfg: AbstractRestConfig,private val pingClient: WebClient = webClient) : RetryAware, Pingable {
+    abstract class AbstractRetryingWebClientAdapter(webC: WebClient,  cf: AbstractRestConfig, pingC: WebClient = webC) : AbstractWebClientAdapter(webC,cf,pingC),RetryAware
+
+    abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
 
     protected val log: Logger = getLogger(javaClass)
 
