@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry
 
-abstract class AbstractRestConfig(val baseUri: URI, protected val pingPath: String, name: String = baseUri.host,  isEnabled: Boolean = true, val retry: RetryConfig = RetryConfig.DEFAULT) : AbstractConfig(name,isEnabled){
+abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host,  isEnabled: Boolean, val retry: RetryConfig) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)
 
 
