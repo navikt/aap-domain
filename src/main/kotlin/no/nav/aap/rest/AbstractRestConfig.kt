@@ -1,15 +1,20 @@
 package no.nav.aap.rest
 
-import no.nav.aap.util.URIUtil.uri
 import java.net.URI
 import java.time.Duration
+import java.util.*
+import java.util.function.Predicate
+import no.nav.aap.util.URIUtil.uri
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
-import org.springframework.boot.convert.DurationStyle
+import org.springframework.boot.convert.DurationStyle.*
 import org.springframework.web.reactive.function.client.WebClientResponseException
+import org.springframework.web.reactive.function.client.WebClientResponseException.Forbidden
 import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
 import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry
+import reactor.util.retry.Retry.*
+import reactor.util.retry.RetryBackoffSpec
 
 abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host,  isEnabled: Boolean, val retry: RetryConfig) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)
@@ -20,16 +25,20 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         companion object {
             const val DEFAULT_RETRIES = "3"
             const val DEFAULT_DELAY = "100ms"
-            val DEFAULT = RetryConfig(DEFAULT_RETRIES.toLong(), DurationStyle.detectAndParse(DEFAULT_DELAY))
+            val DEFAULT = RetryConfig(DEFAULT_RETRIES.toLong(), detectAndParse(DEFAULT_DELAY))
         }
     }
 
-    fun retrySpec(log: Logger) =
-        Retry.fixedDelay(retry.retries, retry.delayed)
-            .filter { e -> e is WebClientResponseException && e !is Unauthorized && e !is NotFound }
+    fun retrySpec(log: Logger,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_FILTER) =
+        fixedDelay(retry.retries, retry.delayed)
+            .filter(exceptionsFilter)
             .onRetryExhaustedThrow { _, s ->  s.failure()}
             .doBeforeRetry { s -> log.warn("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.name} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen") }
 
+    companion object  {
+        private val DEFAULT_EXCEPTIONS_FILTER = Predicate<Throwable> { it is WebClientResponseException  && it !is Unauthorized && it !is NotFound && it !is Forbidden }
+
+   }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
 }
 
