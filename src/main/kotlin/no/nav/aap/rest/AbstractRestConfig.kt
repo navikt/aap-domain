@@ -1,5 +1,6 @@
 package no.nav.aap.rest
 
+import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.util.*
@@ -37,9 +38,8 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
             .doBeforeRetry { s -> log.warn("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen") }
 
     companion object  {
-        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { it is WebClientResponseException  && it !is Unauthorized && it !is NotFound && it !is Forbidden }
-
-   }
+        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { it is IOException || (it is WebClientResponseException && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
+    }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
 }
 
