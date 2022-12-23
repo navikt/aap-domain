@@ -7,6 +7,7 @@ import java.util.*
 import java.util.function.BiFunction
 import java.util.function.Predicate
 import no.nav.aap.util.URIUtil.uri
+import org.apache.commons.lang3.exception.ExceptionUtils
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
 import org.springframework.boot.convert.DurationStyle.*
@@ -39,7 +40,7 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
 
 
     companion object  {
-        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { it is IOException || (it is WebClientResponseException && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
+        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { ExceptionUtils.hasCause(it,IOException::class.java) || (it is WebClientResponseException && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
     }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
 }
