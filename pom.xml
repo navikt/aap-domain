@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.nav.aap</groupId>
     <artifactId>aap-domain</artifactId>
-    <version>1.0.39-SNAPSHOT</version>
+    <version>1.0.39</version>
     <name>aap-domain</name>
     <description>aap-domain</description>
 
@@ -11,7 +11,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.5</version>
-        <relativePath/>
+        <relativePath />
     </parent>
     <properties>
         <i18n.version>1.29</i18n.version>
@@ -91,7 +91,7 @@
         <connection>scm:git:https://github.com/navikt/aap-domain.git</connection>
         <developerConnection>scm:git:https://github.com/navikt/aap-domain.git
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>aap-domain-1.0.39</tag>
     </scm>
 <build>
 <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
