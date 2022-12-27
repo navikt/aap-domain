@@ -8,6 +8,7 @@ import java.util.function.BiFunction
 import java.util.function.Predicate
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils
+import org.apache.commons.lang3.exception.ExceptionUtils.*
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
 import org.springframework.boot.convert.DurationStyle.*
@@ -35,12 +36,12 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
          fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow { _, s -> s.failure().also { log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") } }
-            .doAfterRetry  { s -> log.warn("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} gjort for ${s.totalRetriesInARow() + 1} gang") }
-            .doBeforeRetry { s -> log.warn("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen") }
+            .doAfterRetry  { s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} gjort for ${s.totalRetriesInARow() + 1} gang") }
+            .doBeforeRetry { s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen") }
 
 
     companion object  {
-        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { ExceptionUtils.hasCause(it,IOException::class.java) || (it is WebClientResponseException && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
+        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || (it is WebClientResponseException && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
     }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
 }
