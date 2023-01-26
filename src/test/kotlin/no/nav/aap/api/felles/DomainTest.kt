@@ -1,8 +1,8 @@
 package no.nav.aap.api.felles
 
+import jakarta.validation.Validation
+import jakarta.validation.constraints.Min
 import java.time.LocalDate.now
-import javax.validation.Validation
-import javax.validation.constraints.Min
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
