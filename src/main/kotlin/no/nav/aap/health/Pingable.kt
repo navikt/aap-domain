@@ -1,5 +1,4 @@
 package no.nav.aap.health
-import java.net.URI
 
 interface Pingable {
     fun ping(): Map<String,String>

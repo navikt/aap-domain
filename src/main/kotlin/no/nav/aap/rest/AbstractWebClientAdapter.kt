@@ -3,7 +3,6 @@ package no.nav.aap.rest
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
-import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.LoggerUtil.getLogger
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID1

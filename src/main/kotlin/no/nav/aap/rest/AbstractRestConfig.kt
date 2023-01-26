@@ -4,10 +4,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.util.*
-import java.util.function.BiFunction
 import java.util.function.Predicate
 import no.nav.aap.util.URIUtil.uri
-import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.commons.lang3.exception.ExceptionUtils.*
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
@@ -17,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
 import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry.*
-import reactor.util.retry.RetryBackoffSpec
 
 abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host,  isEnabled: Boolean, val retry: RetryConfig) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)

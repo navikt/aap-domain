@@ -10,14 +10,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.5</version>
+        <version>3.0.2</version>
         <relativePath />
     </parent>
     <properties>
         <i18n.version>1.29</i18n.version>
         <java.version>17</java.version>
         <kotlin.version>1.8.0</kotlin.version>
-        <token.validation.version>2.1.9</token.validation.version>
+        <token.validation.version>3.0.2</token.validation.version>
     </properties>
     <dependencies>
         <dependency>
