@@ -7,11 +7,13 @@ import no.nav.aap.util.LoggerUtil.getLogger
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID1
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID2
+import no.nav.aap.util.MDCUtil.NAV_CALL_ID3
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
 import org.slf4j.Logger
+import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.client.ClientRequest
@@ -54,6 +56,7 @@ import org.springframework.web.reactive.function.client.WebClient
                             .header(NAV_CALL_ID, callId())
                             .header(NAV_CALL_ID1, callId())
                             .header(NAV_CALL_ID2, callId())
+                            .header(NAV_CALL_ID3, callId())
                             .build())
             }
 

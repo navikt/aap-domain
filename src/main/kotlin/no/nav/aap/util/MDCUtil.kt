@@ -11,6 +11,7 @@ object MDCUtil {
     const val NAV_CALL_ID = "Nav-CallId"
     const val NAV_CALL_ID1 = "Nav-Call-Id"
     const val NAV_CALL_ID2 = "callId"
+    const val NAV_CALL_ID3 = "X-Correlation-ID"
 
     fun callId() = MDC.get(NAV_CALL_ID) ?:  run {
         val id = CallIdGenerator.create()
