@@ -7,6 +7,7 @@ import java.util.*
 import java.util.Base64.*
 import java.util.Locale.*
 import kotlin.math.min
+import kotlin.text.Charsets.UTF_8
 import no.nav.boot.conditionals.EnvUtil
 import org.springframework.core.env.Environment
 
@@ -56,5 +57,8 @@ object StringExtensions {
     fun Any.toJson(mapper: ObjectMapper) = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 
     fun ByteArray.encode() = getEncoder().encodeToString(this)
+
+    fun String.encode() = toByteArray(UTF_8).encode()
+
 
 }
