@@ -33,9 +33,15 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
     fun retrySpec(log: Logger,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
          fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
-            .onRetryExhaustedThrow { _, s -> s.failure().also { log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") } }
-            .doAfterRetry  { s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} gjort for ${s.totalRetriesInARow() + 1} gang") }
-            .doBeforeRetry { s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen") }
+            .onRetryExhaustedThrow {
+                _, s -> s.failure().also { log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
+            }
+            .doAfterRetry  {
+                s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} gjort for ${s.totalRetriesInARow() + 1} gang")
+            }
+            .doBeforeRetry {
+                s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen")
+            }
 
 
     companion object  {

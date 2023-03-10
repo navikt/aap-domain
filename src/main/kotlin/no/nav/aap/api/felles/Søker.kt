@@ -13,7 +13,7 @@ data class Navn(val fornavn: String?, val mellomnavn: String?, val etternavn: St
 }
 data class Fødselsnummer(@get:JsonValue val fnr: String) {
     init {
-        require(fnr.length == 11) { "Fødselsnummer må være 11 siffer" }
+        require(fnr.length == 11) { "Fødselsnummer $fnr er ikke 11 siffer" }
         require(mod11(W1, fnr) == fnr[9] - '0') { "Første kontrollsiffer $fnr[9] ikke validert" }
         require(mod11(W2, fnr) == fnr[10] - '0'){ "Andre kontrollsiffer $fnr[10] ikke validert" }
     }
