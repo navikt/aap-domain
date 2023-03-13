@@ -11,6 +11,13 @@ data class Navn(val fornavn: String?, val mellomnavn: String?, val etternavn: St
     @JsonIgnore
     val navn = listOfNotNull(fornavn, mellomnavn, etternavn).joinToString(separator = " ").trim()
 }
+
+data class AktørId(@get:JsonValue val id: String) {
+    init {
+        require(id.length == 12) { "Aktørid $id er ikke 13 siffer" }
+    }
+}
+
 data class Fødselsnummer(@get:JsonValue val fnr: String) {
     init {
         require(fnr.length == 11) { "Fødselsnummer $fnr er ikke 11 siffer" }
