@@ -14,7 +14,7 @@ data class Navn(val fornavn: String?, val mellomnavn: String?, val etternavn: St
 
 data class AktørId(@get:JsonValue val id: String) {
     init {
-        require(id.length == 12) { "Aktørid $id er ikke 13 siffer" }
+        require(id.length == 13) { "Aktørid $id er ikke 13 siffer" }
     }
 }
 
