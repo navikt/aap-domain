@@ -16,6 +16,8 @@ object EnvExtensions {
     fun Environment.isGcp() = EnvUtil.isGcp(this)
     fun Environment.isProd() = EnvUtil.isProd(this)
     fun Environment.isDev() = EnvUtil.isDev(this)
+    fun Environment.isDevOrLocal() = EnvUtil.isDevOrLocal(this)
+
 }
 object StringExtensions {
     private const val DEFAULT_LENGTH = 50
