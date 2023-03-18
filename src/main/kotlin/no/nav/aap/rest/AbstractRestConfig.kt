@@ -6,6 +6,7 @@ import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
+import javax.swing.text.html.HTML.Tag.BASE
 import no.nav.aap.util.Metrics
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.*
@@ -38,15 +39,23 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
                 _, s -> s.failure().also {
-                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION,"${s.failure().javaClass.name}",TYPE, EXHAUSTED)
-                log.warn("Retry kall mot  $baseUri gir opp grunnet exception ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
+                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION,"${s.name()}",TYPE, EXHAUSTED)
+                log.warn("Retry mot $baseUri/$path gir opp grunnet exception ${s.name()} etter ${s.totalRetries()} forsøk") }
             }
+             .doBeforeRetry {
+                 if (it.totalRetries() == 0L)  {
+                     log.info("1. retry kall mot $baseUri$/path grunnet exception ${it.name()} og melding ${it.failure().message}")
+                 }
+                 else   {
+                     log.info("${it.totalRetries()}. retry mot $baseUri/$path grunnet exception ${it.name()} og melding ${it.failure().message} feilet etter ${it.totalRetriesInARow() + 1}. forsøk, prøver igjen")
+                 }
+             }
             .doAfterRetry  {
-                log.info("Retry kall mot $baseUri/$path grunnet exception ${it.failure().javaClass.simpleName} feilet etter ${it.totalRetriesInARow() + 1}. forsøk")
+                log.info("${it.totalRetries()}. retry mot $baseUri/$path grunnet exception ${it.name()}")
             }
-            .doBeforeRetry {
-                log.info("Retry kall mot $baseUri grunnet exception ${it.failure().javaClass.simpleName} og melding ${it.failure().message} feilet etter ${it.totalRetriesInARow() + 1}. forsøk, prøver igjen")
-            }
+
+    private fun RetrySignal.name() = failure().javaClass.simpleName
+
 
 
     companion object  {
