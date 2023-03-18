@@ -1,10 +1,12 @@
 package no.nav.aap.rest
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
+import no.nav.aap.util.Metrics
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.*
 import org.slf4j.Logger
@@ -17,12 +19,14 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry.*
 
-abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host,  isEnabled: Boolean, val retry: RetryConfig) : AbstractConfig(name,isEnabled){
+abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host, isEnabled: Boolean, val retry: RetryConfig, val metrikker: Metrics = Metrics(SimpleMeterRegistry())) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)
 
 
-    data class RetryConfig(@DefaultValue(DEFAULT_RETRIES)  val retries: Long,
-                           @DefaultValue(DEFAULT_DELAY)  val delayed: Duration) {
+    data class RetryConfig(
+            @DefaultValue(DEFAULT_RETRIES) val retries: Long,
+            @DefaultValue(DEFAULT_DELAY) val delayed: Duration,
+                          ) {
         companion object {
             const val DEFAULT_RETRIES = "3"
             const val DEFAULT_DELAY = "100ms"
@@ -30,21 +34,28 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         }
     }
 
-    fun retrySpec(log: Logger,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
+    fun retrySpec(log: Logger, path: String = "/",exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
          fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
-                _, s -> s.failure().also { log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
+                _, s -> s.failure().also {
+                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION,"${s.failure().javaClass.name}",TYPE, EXHAUSTED)
+                log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
             }
-            .doAfterRetry  {
-                s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} gjort for ${s.totalRetriesInARow() + 1} gang")
-            }
+            .doAfterRetry  {log.info("Retry mot $baseUri/$path grunnet exception ${it.failure().javaClass.simpleName},  ${it.totalRetriesInARow()} forsøk") }
             .doBeforeRetry {
-                s -> log.info("Retry kall mot $baseUri grunnet exception ${s.failure().javaClass.simpleName} og melding ${s.failure().message} for ${s.totalRetriesInARow() + 1} gang, prøver igjen")
+                log.info("Retry kall mot $baseUri grunnet exception ${it.failure().javaClass.simpleName} og melding ${it.failure().message} for ${it.totalRetriesInARow() + 1} gang, prøver igjen")
             }
 
 
     companion object  {
+        private const val METRIKKNAVN = "webclient"
+        private const val BASE = "base"
+        private const val PATH = "path"
+        private const val EXCEPTION = "exception"
+        private const val TYPE = "type"
+        private const val EXHAUSTED = "exhausted"
+        private const val SUCCESS = "success"
         private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || (it is WebClientResponseException && it !is BadRequest && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
     }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
