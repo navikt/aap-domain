@@ -29,7 +29,7 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
             @DefaultValue(DEFAULT_DELAY) val delayed: Duration) {
         companion object {
             private const val DEFAULT_RETRIES = "3"
-            private const val DEFAULT_DELAY = "100ms"
+            private const val DEFAULT_DELAY = "1000ms"
             val DEFAULT = RetryConfig(DEFAULT_RETRIES.toLong(), detectAndParse(DEFAULT_DELAY))
         }
     }
