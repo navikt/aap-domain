@@ -1,15 +1,13 @@
 package no.nav.aap.rest
 
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
-import javax.swing.text.html.HTML.Tag.BASE
 import no.nav.aap.util.Metrics
 import no.nav.aap.util.URIUtil.uri
-import org.apache.commons.lang3.exception.ExceptionUtils.*
+import org.apache.commons.lang3.exception.ExceptionUtils.hasCause
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
 import org.springframework.boot.convert.DurationStyle.*
@@ -34,30 +32,23 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         }
     }
 
-    fun retrySpec(log: Logger, path: String = "/",metrikker: Metrics,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
-         fixedDelay(retry.retries, retry.delayed)
+    fun retrySpec(log: Logger, path: String = "/", metrikker: Metrics,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
+        fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
                 _, s -> s.failure().also {
-                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION,"${s.name()}",TYPE, EXHAUSTED)
-                log.warn("Retry mot $baseUri/$path gir opp grunnet exception ${s.name()} etter ${s.totalRetries()} forsøk") }
+                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION, s.name(),TYPE, EXHAUSTED)
+                log.warn("Retry mot $baseUri/$path gir opp pga. exception ${s.name()} etter ${s.totalRetries()} forsøk") }
             }
-             .doBeforeRetry {
-                 if (it.totalRetries() == 0L)  {
-                     log.info("1. retry kall mot $baseUri$/path grunnet exception ${it.name()} og melding ${it.failure().message}")
-                 }
-                 else   {
-                     log.info("${it.totalRetries()}. retry mot $baseUri/$path grunnet exception ${it.name()} og melding ${it.failure().message} feilet etter ${it.totalRetriesInARow() + 1}. forsøk, prøver igjen")
-                 }
-             }
+            .doBeforeRetry {
+                log.warn("${it.totalRetries() + 1}. retry mot $baseUri$/$path pga. exception ${it.name()} og melding ${it.failure().message}")
+            }
             .doAfterRetry  {
-                log.info("${it.totalRetries()}. retry mot $baseUri/$path grunnet exception ${it.name()}")
+                log.warn("${it.totalRetries() + 1}. retry mot $baseUri/$path pga. exception ${it.name()} utført")
             }
 
     private fun RetrySignal.name() = failure().javaClass.simpleName
-
-
-
+    
     companion object  {
         private const val METRIKKNAVN = "webclient"
         private const val BASE = "base"
