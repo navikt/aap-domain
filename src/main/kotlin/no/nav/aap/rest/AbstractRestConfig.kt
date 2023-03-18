@@ -25,26 +25,27 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
 
     data class RetryConfig(
             @DefaultValue(DEFAULT_RETRIES) val retries: Long,
-            @DefaultValue(DEFAULT_DELAY) val delayed: Duration,
-                          ) {
+            @DefaultValue(DEFAULT_DELAY) val delayed: Duration) {
         companion object {
-            const val DEFAULT_RETRIES = "3"
-            const val DEFAULT_DELAY = "100ms"
+            private const val DEFAULT_RETRIES = "3"
+            private const val DEFAULT_DELAY = "100ms"
             val DEFAULT = RetryConfig(DEFAULT_RETRIES.toLong(), detectAndParse(DEFAULT_DELAY))
         }
     }
 
-    fun retrySpec(log: Logger, path: String = "/",exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE, metrikker: Metrics) =
+    fun retrySpec(log: Logger, path: String = "/",metrikker: Metrics,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
          fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
                 _, s -> s.failure().also {
                 metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION,"${s.failure().javaClass.name}",TYPE, EXHAUSTED)
-                log.warn("Retry kall mot  $baseUri gir opp med  ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
+                log.warn("Retry kall mot  $baseUri gir opp grunnet exception ${s.failure().javaClass.simpleName} etter ${s.totalRetries()} forsøk") }
             }
-            .doAfterRetry  {log.info("Retry mot $baseUri/$path grunnet exception ${it.failure().javaClass.simpleName},  ${it.totalRetriesInARow()} forsøk") }
+            .doAfterRetry  {
+                log.info("Retry kall mot $baseUri/$path grunnet exception ${it.failure().javaClass.simpleName} feilet etter ${it.totalRetriesInARow() + 1}. forsøk")
+            }
             .doBeforeRetry {
-                log.info("Retry kall mot $baseUri grunnet exception ${it.failure().javaClass.simpleName} og melding ${it.failure().message} for ${it.totalRetriesInARow() + 1} gang, prøver igjen")
+                log.info("Retry kall mot $baseUri grunnet exception ${it.failure().javaClass.simpleName} og melding ${it.failure().message} feilet etter ${it.totalRetriesInARow() + 1}. forsøk, prøver igjen")
             }
 
 
