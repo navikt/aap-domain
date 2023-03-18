@@ -5,9 +5,8 @@ import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
-import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion
 import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
-import no.nav.aap.util.Metrics
+import no.nav.aap.util.Metrikker
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.hasCause
 import org.slf4j.Logger
@@ -34,12 +33,12 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         }
     }
 
-    fun retrySpec(log: Logger, path: String = "/", metrikker: Metrics,exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
+    fun retrySpec(log: Logger, path: String = "/", exceptionsFilter: Predicate<in Throwable> = DEFAULT_EXCEPTIONS_PREDICATE) =
         fixedDelay(retry.retries, retry.delayed)
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
                 _, s -> s.failure().also {
-                metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION, s.name(),TYPE, EXHAUSTED)
+                Metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION, s.name(),TYPE, EXHAUSTED)
                 log.warn("Retry mot $baseUri/$path gir opp pga. exception ${s.name()} etter ${s.totalRetries()} forsøk") }
             }
             .doBeforeRetry {

@@ -1,6 +1,5 @@
 package no.nav.aap.rest
 
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
@@ -13,9 +12,7 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
-import no.nav.aap.util.Metrics
 import org.slf4j.Logger
-import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.client.ClientRequest
@@ -23,8 +20,7 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
 
-    abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient,val metrikker: Metrics = Metrics(
-            SimpleMeterRegistry())) : Pingable {
+    abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
 
     protected val log: Logger = getLogger(javaClass)
 
