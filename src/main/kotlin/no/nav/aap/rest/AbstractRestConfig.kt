@@ -5,6 +5,8 @@ import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
+import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion
+import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
 import no.nav.aap.util.Metrics
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.hasCause
@@ -18,7 +20,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry.*
 
-abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host, isEnabled: Boolean, val retry: RetryConfig) : AbstractConfig(name,isEnabled){
+abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host, isEnabled: Boolean, val retry: RetryConfig = DEFAULT) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)
 
 
