@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.nav.aap</groupId>
     <artifactId>aap-domain</artifactId>
-    <version>2.0.29-SNAPSHOT</version>
+    <version>2.0.29</version>
     <name>aap-domain</name>
     <description>aap-domain</description>
 
@@ -96,7 +96,7 @@
         <connection>scm:git:https://github.com/navikt/aap-domain.git</connection>
         <developerConnection>scm:git:https://github.com/navikt/aap-domain.git
         </developerConnection>
-        <tag>HEAD</tag>
+        <tag>aap-domain-2.0.29</tag>
     </scm>
 <build>
 <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
