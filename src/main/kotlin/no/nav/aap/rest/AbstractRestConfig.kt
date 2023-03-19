@@ -6,7 +6,7 @@ import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
 import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
-import no.nav.aap.util.Metrikker
+import no.nav.aap.util.Metrikker.inc
 import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.hasCause
 import org.slf4j.Logger
@@ -38,14 +38,20 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
             .filter(exceptionsFilter)
             .onRetryExhaustedThrow {
                 _, s -> s.failure().also {
-                Metrikker.inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION, s.name(),TYPE, EXHAUSTED)
+                inc(METRIKKNAVN, BASE,"$baseUri",PATH,path, EXCEPTION, s.name(),TYPE, EXHAUSTED)
                 log.warn("Retry mot $baseUri/$path gir opp pga. exception ${s.name()} etter ${s.totalRetries()} forsøk") }
             }
             .doBeforeRetry {
                 log.warn("${it.totalRetries() + 1}. retry mot $baseUri$/$path pga. exception ${it.name()} og melding ${it.failure().message}")
             }
             .doAfterRetry  {
-                log.warn("${it.totalRetries() + 1}. retry mot $baseUri/$path pga. exception ${it.name()} utført")
+                if (it.failure() == null)  {
+                    log.info("Retry mot $baseUri/$path var vellykket på forsøk  ${it.totalRetries() +1}")
+                    inc(METRIKKNAVN, BASE,"$baseUri",PATH,path,TYPE, SUCCESS)
+                }
+                else {
+                    log.warn("${it.totalRetries() + 1}. retry mot $baseUri/$path feilet på forsøk ${it.totalRetries() +1 } med exception ${it.name()}")
+                }
             }
 
     private fun RetrySignal.name() = failure().javaClass.simpleName
