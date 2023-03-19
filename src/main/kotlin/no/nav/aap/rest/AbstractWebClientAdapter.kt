@@ -51,6 +51,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
 
     companion object {
 
+        @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
         private fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke()) {
