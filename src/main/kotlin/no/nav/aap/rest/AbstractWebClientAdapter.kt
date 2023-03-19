@@ -53,7 +53,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
 
         @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
-        private fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
+        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke()) {
                 with(WebClientResponseException(status,
                         "Tvinger fram feil i $currentCluster for ${it.url()}",
