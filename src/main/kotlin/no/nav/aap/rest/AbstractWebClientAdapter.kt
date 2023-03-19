@@ -12,17 +12,21 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
+import no.nav.boot.conditionals.Cluster.Companion.currentCluster
 import org.slf4j.Logger
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.BAD_GATEWAY
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import reactor.core.publisher.Mono
 
-    abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
+abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
 
-    protected val log: Logger = getLogger(javaClass)
 
     override fun ping() : Map<String,String> {
         if (isEnabled()) {
@@ -46,6 +50,25 @@ import org.springframework.web.reactive.function.client.WebClient
     override fun isEnabled() = cfg.isEnabled
 
     companion object {
+
+        protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
+        private fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
+            if (criteria.invoke()) {
+                with(WebClientResponseException(status,
+                        "Tvinger fram feil i $currentCluster for ${it.url()}",
+                        null,
+                        null,
+                        null,
+                        null)) {
+                    log.info(message, this)
+                    Mono.error(this)
+                }
+            }
+            else {
+                log.trace("Tvinger IKKE fram feil i $this for ${it.url()}")
+                Mono.just(it)
+            }
+        }
         fun correlatingFilterFunction(defaultConsumerId: String) =
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
                 next.exchange(
