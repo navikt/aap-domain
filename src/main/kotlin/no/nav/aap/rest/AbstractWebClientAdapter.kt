@@ -24,6 +24,7 @@ import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
+import reactor.kotlin.core.publisher.toMono
 
 abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
 
@@ -54,20 +55,15 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
         @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
         fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
-            if (criteria.invoke()) {
-                with(WebClientResponseException(status,
-                        "Tvinger fram feil i $currentCluster for ${it.url()}",
-                        null,
-                        null,
-                        null,
-                        null)) {
+            if (criteria.invoke() && !it.url().host.contains("microsoft")) {
+                with(WebClientResponseException(status, "Tvinger fram feil i $currentCluster for ${it.url()}", null, null, null, null)) {
                     log.info(message, this)
-                    Mono.error(this)
+                   toMono()
                 }
             }
             else {
                 log.trace("Tvinger IKKE fram feil i $this for ${it.url()}")
-                Mono.just(it)
+                it.toMono()
             }
         }
         fun correlatingFilterFunction(defaultConsumerId: String) =
