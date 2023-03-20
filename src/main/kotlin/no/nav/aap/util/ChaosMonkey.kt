@@ -8,11 +8,11 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 class ChaosMonkey(private val defaultCriteria: () -> Boolean) {
     private val log = LoggerUtil.getLogger(ChaosMonkey::class.java)
 
-    fun inhjectFault(component: Any)  = injectFault(component, RecoverableIntegrationException("Chaos Monkey exception $component",null,null))
+    fun inhjectFault(component: String)  = injectFault(component, RecoverableIntegrationException("Chaos Monkey exception $component",null,null))
     fun injectFault( component: Any, t: Throwable,criteria: () -> Boolean = defaultCriteria) =
         if (criteria.invoke()) {
             throw t.also {
-                log.warn("Chaos Monkey exception ${component.javaClass.name}",t)
+                log.warn("Chaos Monkey exception $component",t)
             }
         }
         else Unit
