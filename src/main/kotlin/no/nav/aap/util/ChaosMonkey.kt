@@ -9,7 +9,8 @@ class ChaosMonkey(private val defaultCriteria: () -> Boolean) {
     private val log = LoggerUtil.getLogger(ChaosMonkey::class.java)
 
     fun inhjectFault(component: String)  = injectFault(component, RecoverableIntegrationException("Chaos Monkey exception $component",null,null))
-    fun injectFault( component: Any, t: Throwable,criteria: () -> Boolean = defaultCriteria) =
+
+    fun injectFault( component: String, t: Throwable,criteria: () -> Boolean = defaultCriteria) =
         if (criteria.invoke()) {
             throw t.also {
                 log.warn("Chaos Monkey exception $component",t)
