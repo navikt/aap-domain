@@ -1,5 +1,6 @@
 package no.nav.aap.rest
 
+import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
@@ -54,9 +55,9 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
 
         @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
-        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean, status: HttpStatus = BAD_GATEWAY) = ExchangeFilterFunction.ofRequestProcessor {
+        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke() && !it.url().host.contains("microsoft")) {
-                with(WebClientResponseException(status, "Tvinger fram feil i $currentCluster for ${it.url()}", null, null, null, null)) {
+                with(RecoverableIntegrationException("Tvungen  feil i $currentCluster for ${it.url()}",null,null)) {
                     log.info(message, this)
                    toMono()
                 }
