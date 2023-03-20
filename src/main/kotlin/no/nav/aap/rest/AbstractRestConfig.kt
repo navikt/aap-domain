@@ -5,6 +5,8 @@ import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
+import no.nav.aap.api.felles.error.IntegrationException
+import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
 import no.nav.aap.util.Metrikker.inc
 import no.nav.aap.util.URIUtil.uri
@@ -64,7 +66,7 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         private const val TYPE = "type"
         private const val EXHAUSTED = "exhausted"
         private const val SUCCESS = "success"
-        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || (it is WebClientResponseException && it !is BadRequest && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
+        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || it is RecoverableIntegrationException || (it is WebClientResponseException && it !is BadRequest && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
     }
     override fun toString() = "${javaClass.simpleName} [name=$name, isEnabled=$isEnabled, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri]"
 }
