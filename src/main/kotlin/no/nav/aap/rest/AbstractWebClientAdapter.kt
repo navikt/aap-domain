@@ -57,6 +57,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
         fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke() && !it.url().host.contains("microsoft")) {
+                log.info("Tvinger fram feil for ${it.url()}")
                 with(RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for ${it.url()}")) {
                     log.info(message, this)
                    toMono()
