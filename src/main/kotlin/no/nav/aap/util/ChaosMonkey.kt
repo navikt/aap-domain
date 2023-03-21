@@ -6,8 +6,12 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClientResponseException
 
 class ChaosMonkey(private val defaultCriteria: () -> Boolean) {
+
     private val log = LoggerUtil.getLogger(ChaosMonkey::class.java)
 
+    init {
+          log.info("MOnkey init med cr")
+    }
     fun injectFault( component: String, t: Throwable,criteria: () -> Boolean = defaultCriteria) =
         if (criteria.invoke()) {
             throw t.also {
