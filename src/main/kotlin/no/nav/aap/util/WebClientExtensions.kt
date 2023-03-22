@@ -15,12 +15,12 @@ object WebClientExtensions {
                 bodyToMono(T::class.java)
             }
             else if (is4xxClientError)
-                bodyToMono<String>().flatMap {
-                    log.warn(it)
-                    IrrecoverableIntegrationException(it).toMono()
+                bodyToMono<Any>().flatMap {
+                    log.warn("$it")
+                    IrrecoverableIntegrationException("$it").toMono()
                 }
-            else bodyToMono<String>().flatMap {
-                RecoverableIntegrationException(it).toMono()
+            else bodyToMono<Any>().flatMap {
+                RecoverableIntegrationException("$it").toMono()
             }
         }
 }
