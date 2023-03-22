@@ -15,16 +15,12 @@ import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
 import no.nav.boot.conditionals.Cluster.Companion.currentCluster
 import org.slf4j.Logger
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.BAD_GATEWAY
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
 import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 
 abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
@@ -57,14 +53,14 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
         fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke() && !it.url().host.contains("microsoft")) {
-                log.info("Tvinger fram feil for ${it.url()}")
+                log.trace("Tvinger fram feil for ${it.url()}")
                 with(RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for ${it.url()}")) {
                     log.info(message, this)
                    toMono()
                 }
             }
             else {
-                log.info("Tvinger IKKE fram feil  for ${it.url()}")
+                log.trace("Tvinger IKKE fram feil  for ${it.url()}")
                 it.toMono()
             }
         }
