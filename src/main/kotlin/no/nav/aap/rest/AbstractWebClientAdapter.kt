@@ -45,6 +45,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
     override fun isEnabled() = cfg.isEnabled
 
     companion object {
+        @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
         fun correlatingFilterFunction(defaultConsumerId: String) =
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
