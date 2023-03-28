@@ -1,12 +1,6 @@
 package no.nav.aap.rest
 
-import java.net.URI
-import kotlin.reflect.KClass
-import no.nav.aap.api.felles.error.IrrecoverableIntegrationException
-import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import no.nav.aap.health.Pingable
-import no.nav.aap.rest.AbstractWebClientAdapter.Companion.MonkeyExceptionType.IRRECOVERABLE
-import no.nav.aap.rest.AbstractWebClientAdapter.Companion.MonkeyExceptionType.RECOVERABLE
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil.getLogger
@@ -18,7 +12,6 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID
 import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
-import no.nav.boot.conditionals.Cluster.Companion.currentCluster
 import org.slf4j.Logger
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
@@ -26,7 +19,6 @@ import org.springframework.web.reactive.function.client.ClientRequest
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.kotlin.core.publisher.toMono
 
 abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
 
@@ -53,33 +45,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
     override fun isEnabled() = cfg.isEnabled
 
     companion object {
-
-        enum class MonkeyExceptionType  { RECOVERABLE, IRRECOVERABLE;
-            fun toException(uri: URI) =
-                when(this) {
-                    RECOVERABLE -> RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for $uri")
-                    IRRECOVERABLE -> IrrecoverableIntegrationException("Chaos Monkey irrrecoverable exception i $currentCluster for $uri")
-                }
-        }
-
-
-
-
-        @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
-        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean = {false}, type: MonkeyExceptionType = RECOVERABLE) = ExchangeFilterFunction.ofRequestProcessor {
-            if (criteria.invoke() && !it.url().host.contains("microsoft")) {
-                log.trace("Tvinger fram feil for ${it.url()}")
-                with(type.toException(it.url())) {
-                    log.info(message, this)
-                   toMono()
-                }
-            }
-            else {
-                log.trace("Tvinger IKKE fram feil  for ${it.url()}")
-                it.toMono()
-            }
-        }
         fun correlatingFilterFunction(defaultConsumerId: String) =
             ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
                 next.exchange(
