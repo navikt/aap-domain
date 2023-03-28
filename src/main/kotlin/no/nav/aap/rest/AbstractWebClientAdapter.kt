@@ -1,7 +1,12 @@
 package no.nav.aap.rest
 
+import java.net.URI
+import kotlin.reflect.KClass
+import no.nav.aap.api.felles.error.IrrecoverableIntegrationException
 import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import no.nav.aap.health.Pingable
+import no.nav.aap.rest.AbstractWebClientAdapter.Companion.MonkeyExceptionType.IRRECOVERABLE
+import no.nav.aap.rest.AbstractWebClientAdapter.Companion.MonkeyExceptionType.RECOVERABLE
 import no.nav.aap.util.Constants.AAP
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil.getLogger
@@ -49,12 +54,23 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
 
     companion object {
 
+        enum class MonkeyExceptionType  { RECOVERABLE, IRRECOVERABLE;
+            fun toException(uri: URI) =
+                when(this) {
+                    RECOVERABLE -> RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for $uri")
+                    IRRECOVERABLE -> IrrecoverableIntegrationException("Chaos Monkey irrrecoverable exception i $currentCluster for $uri")
+                }
+        }
+
+
+
+
         @JvmStatic
         protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
-        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean) = ExchangeFilterFunction.ofRequestProcessor {
+        fun chaosMonkeyRequestFilterFunction( criteria: () -> Boolean = {false}, type: MonkeyExceptionType = RECOVERABLE) = ExchangeFilterFunction.ofRequestProcessor {
             if (criteria.invoke() && !it.url().host.contains("microsoft")) {
                 log.trace("Tvinger fram feil for ${it.url()}")
-                with(RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for ${it.url()}")) {
+                with(type.toException(it.url())) {
                     log.info(message, this)
                    toMono()
                 }
