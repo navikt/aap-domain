@@ -51,6 +51,7 @@ class ChaosMonkey(private val defaultCriteria: () -> Boolean = NO_MONKEY) {
     fun criteria(clusters: Array<Cluster> = devClusters(), n: Int = 5) = { -> nextInt(1, n) == 1 && currentCluster in clusters.asList() }
 
     companion object {
-       private  val NO_MONKEY = { false }
+        const val MONKEY = "chaos-monkey"
+        private  val NO_MONKEY = { false }
     }
 }
