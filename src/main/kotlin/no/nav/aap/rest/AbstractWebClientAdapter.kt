@@ -43,6 +43,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
     protected val baseUri = cfg.baseUri
     override fun pingEndpoint() = "${cfg.pingEndpoint}"
     override fun isEnabled() = cfg.isEnabled
+    override fun toString() = "webClient=$webClient, cfg=$cfg, pingClient=$pingClient, baseUri=$baseUri"
 
     companion object {
         @JvmStatic
