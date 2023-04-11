@@ -66,7 +66,7 @@ abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: 
         private const val TYPE = "type"
         private const val EXHAUSTED = "exhausted"
         private const val SUCCESS = "success"
-        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || it is RecoverableIntegrationException || (it is WebClientResponseException && it !is BadRequest && it !is Unauthorized && it !is NotFound && it !is Forbidden) }
+        private val DEFAULT_EXCEPTIONS_PREDICATE = Predicate<Throwable> { hasCause(it,IOException::class.java) || it is RecoverableIntegrationException }
     }
     override fun toString() =  "name=$name, pingPath=$pingPath,enabled=$isEnabled,baseUri=$baseUri"
 }
