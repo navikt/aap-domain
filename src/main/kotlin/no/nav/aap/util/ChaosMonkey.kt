@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.kotlin.core.publisher.toMono
 
-class ChaosMonkey(private val defaultCriteria: () -> Boolean = defaultCriteria()) {
+class ChaosMonkey(private val defaultCriteria: () -> Boolean = defaultCrit()) {
 
     private val log = LoggerUtil.getLogger(ChaosMonkey::class.java)
 
@@ -48,9 +48,9 @@ class ChaosMonkey(private val defaultCriteria: () -> Boolean = defaultCriteria()
             }
         }
         else Unit
-    fun defaultCriteria(clusters: Array<Cluster> = devClusters(), n: Int = 5) = { -> nextInt(1, n) == 1 && currentCluster in clusters.asList() }
 
     companion object {
+        fun defaultCrit(clusters: Array<Cluster> = devClusters(), n: Int = 5) = { -> nextInt(1, n) == 1 && currentCluster in clusters.asList() }
         const val MONKEY = "chaos-monkey"
         private  val NO_MONKEY = { false }
     }
