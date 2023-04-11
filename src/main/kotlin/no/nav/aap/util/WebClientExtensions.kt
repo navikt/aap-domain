@@ -5,7 +5,7 @@ import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import org.slf4j.Logger
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.bodyToMono
-import reactor.kotlin.core.publisher.toMono
+import reactor.core.publisher.Mono
 
 object WebClientExtensions {
 
@@ -17,10 +17,10 @@ object WebClientExtensions {
             else if (is4xxClientError)
                 bodyToMono<Any>().flatMap {
                     log.warn("$it")
-                    IrrecoverableIntegrationException("$it").toMono()
+                    Mono.error(IrrecoverableIntegrationException("$it"))
                 }
             else bodyToMono<Any>().flatMap {
-                RecoverableIntegrationException("$it").toMono()
+                Mono.error(RecoverableIntegrationException("$it"))
             }
         }
 }

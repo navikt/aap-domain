@@ -33,6 +33,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
                 .toBodilessEntity()
                 .doOnSuccess { log.trace("Ping ${pingEndpoint()} OK") }
                 .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
+                .contextCapture()
                 .block()
             return emptyMap()
         }
