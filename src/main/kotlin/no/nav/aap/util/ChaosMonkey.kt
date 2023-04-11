@@ -16,7 +16,7 @@ import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.kotlin.core.publisher.toMono
 
-class ChaosMonkey(private val defaultCriteria: () -> Boolean = NO_MONKEY) {
+class ChaosMonkey(private val defaultCriteria: () -> Boolean = defaultCriteria()) {
 
     private val log = LoggerUtil.getLogger(ChaosMonkey::class.java)
 
@@ -36,8 +36,8 @@ class ChaosMonkey(private val defaultCriteria: () -> Boolean = NO_MONKEY) {
     enum class MonkeyExceptionType  { RECOVERABLE, IRRECOVERABLE;
         fun toException(msg: String) =
             when(this) {
-                RECOVERABLE -> RecoverableIntegrationException("Chaos Monkey recoverable exception i ${Cluster.currentCluster} for $msg")
-                IRRECOVERABLE -> IrrecoverableIntegrationException("Chaos Monkey irrrecoverable exception i ${Cluster.currentCluster} for $msg")
+                RECOVERABLE -> RecoverableIntegrationException("Chaos Monkey recoverable exception i $currentCluster for $msg")
+                IRRECOVERABLE -> IrrecoverableIntegrationException("Chaos Monkey irrrecoverable exception i $currentCluster for $msg")
             }
     }
 
@@ -48,7 +48,7 @@ class ChaosMonkey(private val defaultCriteria: () -> Boolean = NO_MONKEY) {
             }
         }
         else Unit
-    fun criteria(clusters: Array<Cluster> = devClusters(), n: Int = 5) = { -> nextInt(1, n) == 1 && currentCluster in clusters.asList() }
+    fun defaultCriteria(clusters: Array<Cluster> = devClusters(), n: Int = 5) = { -> nextInt(1, n) == 1 && currentCluster in clusters.asList() }
 
     companion object {
         const val MONKEY = "chaos-monkey"
