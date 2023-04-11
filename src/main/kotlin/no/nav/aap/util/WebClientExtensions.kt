@@ -14,10 +14,10 @@ object WebClientExtensions {
                 bodyToMono(T::class.java)
             }
             else if (is4xxClientError) {
-                Mono.error(IrrecoverableIntegrationException("400"))
+                Mono.error(IrrecoverableIntegrationException("$this"))
             }
             else {
-                Mono.error(RecoverableIntegrationException("500"))
+                Mono.error(RecoverableIntegrationException("$this"))
             }
         }
 }
