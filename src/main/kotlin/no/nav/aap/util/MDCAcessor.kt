@@ -3,24 +3,22 @@ package no.nav.aap.util
 import io.micrometer.context.ContextRegistry
 import io.micrometer.context.ThreadLocalAccessor
 import org.slf4j.MDC
+import org.slf4j.MDC.*
 import org.springframework.web.context.request.RequestAttributes
-import org.springframework.web.context.request.RequestContextHolder.*
-import reactor.core.publisher.Hooks
+import org.springframework.web.context.request.RequestContextHolder.getRequestAttributes
+import org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes
+import org.springframework.web.context.request.RequestContextHolder.setRequestAttributes
+import reactor.core.publisher.Hooks.enableAutomaticContextPropagation
 
 class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
 
-    override fun key() = KEY
+    override fun key() = "mdc"
 
-    override fun getValue() = MDC.getCopyOfContextMap() ?: emptyMap()
+    override fun getValue() = getCopyOfContextMap() ?: emptyMap()
 
-    override fun setValue(map : Map<String, String>) = MDC.setContextMap(map)
+    override fun setValue(map : Map<String, String>) = setContextMap(map)
 
-    override fun reset() = MDC.clear()
-
-    companion object {
-
-        private const val KEY = "mdc"
-    }
+    override fun reset() = clear()
 }
 
 class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
@@ -29,8 +27,7 @@ class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
 
     override fun getValue()  = getRequestAttributes()
 
-    override fun setValue(attributes : RequestAttributes) =
-        setRequestAttributes(attributes)
+    override fun setValue(attributes : RequestAttributes) = setRequestAttributes(attributes)
 
     override fun reset() = resetRequestAttributes()
 }
@@ -38,8 +35,8 @@ class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
 object AccessorUtil {
 
     fun init() = run {
-        Hooks.enableAutomaticContextPropagation()
-        with(ContextRegistry.getInstance()) {
+        enableAutomaticContextPropagation()
+        ContextRegistry.getInstance().apply {
             registerThreadLocalAccessor(RequestAttributesAccessor())
             registerThreadLocalAccessor(MDCAccessor())
         }
