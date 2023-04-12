@@ -39,6 +39,9 @@ object AccessorUtil {
 
     fun init() = run {
         Hooks.enableAutomaticContextPropagation()
-        ContextRegistry.getInstance().registerThreadLocalAccessor(MDCAccessor())
-    }
+        with(ContextRegistry.getInstance()) {
+            registerThreadLocalAccessor(RequestAttributesAccessor())
+            registerThreadLocalAccessor(MDCAccessor())
+        }
+     }
 }
