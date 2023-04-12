@@ -35,7 +35,7 @@ private  class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes
 
 object AccessorUtil {
 
-    fun init() = run {
+    fun init()  {
         enableAutomaticContextPropagation()
         getInstance().apply {
             registerThreadLocalAccessor(RequestAttributesAccessor())
