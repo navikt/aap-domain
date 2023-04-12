@@ -1,9 +1,10 @@
 package no.nav.aap.util
 
-import io.micrometer.context.ContextRegistry
+import io.micrometer.context.ContextRegistry.getInstance
 import io.micrometer.context.ThreadLocalAccessor
-import org.slf4j.MDC
-import org.slf4j.MDC.*
+import org.slf4j.MDC.clear
+import org.slf4j.MDC.getCopyOfContextMap
+import org.slf4j.MDC.setContextMap
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder.getRequestAttributes
 import org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes
@@ -36,7 +37,7 @@ object AccessorUtil {
 
     fun init() = run {
         enableAutomaticContextPropagation()
-        ContextRegistry.getInstance().apply {
+        getInstance().apply {
             registerThreadLocalAccessor(RequestAttributesAccessor())
             registerThreadLocalAccessor(MDCAccessor())
         }
