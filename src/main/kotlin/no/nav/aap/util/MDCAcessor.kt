@@ -17,7 +17,7 @@ private class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
 
     override fun getValue() = getCopyOfContextMap() ?: emptyMap()
 
-    override fun setValue(map : Map<String, String>) = setContextMap(map)
+    override fun setValue(value : Map<String, String>) = setContextMap(value)
 
     override fun reset() = clear()
 }
@@ -28,7 +28,7 @@ private  class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes
 
     override fun getValue()  = getRequestAttributes()
 
-    override fun setValue(attributes : RequestAttributes) = setRequestAttributes(attributes)
+    override fun setValue(value : RequestAttributes) = setRequestAttributes(value)
 
     override fun reset() = resetRequestAttributes()
 }
