@@ -5,4 +5,8 @@ object ExtensionUtils {
         if (this == null) block()
         return this@whenNull
     }
+
+     inline fun <T, R> Iterable<T>.mapToSet(transform : (T) -> R) : Set<R> {
+        return mapTo(HashSet(), transform)
+    }
 }
