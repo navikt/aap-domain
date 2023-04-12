@@ -11,7 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder.resetRequest
 import org.springframework.web.context.request.RequestContextHolder.setRequestAttributes
 import reactor.core.publisher.Hooks.enableAutomaticContextPropagation
 
-class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
+private class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
 
     override fun key() = "mdc"
 
@@ -22,7 +22,7 @@ class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
     override fun reset() = clear()
 }
 
-class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
+private  class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
 
     override fun key() = RequestAttributesAccessor::class.java.name
 
