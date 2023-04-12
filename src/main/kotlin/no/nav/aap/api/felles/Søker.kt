@@ -55,6 +55,7 @@ data class Adresse (val adressenavn: String?, val husbokstav: String?, val husnu
 
 
 enum class SkjemaType(val kode: String, val tittel: String) {
+    MELDEKORT("NAV 00-10.02","Meldekort"),
     UTLAND_SØKNAD("NAV 11-03.07", "Søknad om å beholde AAP ved opphold i utlandet"),
     UTLAND_ETTERSENDING("NAVe 11-03.07", "Ettersending til ${UTLAND_SØKNAD.tittel.decap()}"),
     STANDARD("NAV 11-13.05", "Søknad om arbeidsavklaringspenger"),
