@@ -1,5 +1,11 @@
 package no.nav.aap.rest.tokenx
 
+import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.web.reactive.function.client.ClientRequest
+import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction
+import org.springframework.web.reactive.function.client.ExchangeFunction
+import reactor.core.publisher.Mono
 import no.nav.aap.util.AuthContext
 import no.nav.aap.util.LoggerUtil
 import no.nav.aap.util.StringExtensions.asBearer
@@ -7,12 +13,6 @@ import no.nav.boot.conditionals.EnvUtil.CONFIDENTIAL
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
 import no.nav.security.token.support.client.spring.oauth2.ClientConfigurationPropertiesMatcher
-import org.springframework.http.HttpHeaders.AUTHORIZATION
-import org.springframework.web.reactive.function.client.ClientRequest
-import org.springframework.web.reactive.function.client.ClientResponse
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction
-import org.springframework.web.reactive.function.client.ExchangeFunction
-import reactor.core.publisher.Mono
 
 class TokenXFilterFunction(
         private val configs: ClientConfigurationProperties,

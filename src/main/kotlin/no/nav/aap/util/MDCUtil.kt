@@ -1,7 +1,7 @@
 package no.nav.aap.util
 
+import java.util.UUID
 import org.slf4j.MDC
-import java.util.*
 
 object MDCUtil {
     const val NAV_PERSON_IDENT = "Nav-Personident"

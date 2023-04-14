@@ -3,13 +3,13 @@ package no.nav.aap.util
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
-import java.util.*
-import java.util.Base64.*
-import java.util.Locale.*
+import java.util.Base64.getEncoder
+import java.util.Locale.getDefault
+import java.util.Optional
 import kotlin.math.min
 import kotlin.text.Charsets.UTF_8
-import no.nav.boot.conditionals.EnvUtil
 import org.springframework.core.env.Environment
+import no.nav.boot.conditionals.EnvUtil
 
 object EnvExtensions {
 

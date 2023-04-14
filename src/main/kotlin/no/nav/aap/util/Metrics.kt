@@ -1,6 +1,6 @@
 package no.nav.aap.util
 
-import io.micrometer.core.instrument.Counter.*
+import io.micrometer.core.instrument.Counter.builder
 import io.micrometer.core.instrument.Metrics.globalRegistry
 
 object Metrikker {

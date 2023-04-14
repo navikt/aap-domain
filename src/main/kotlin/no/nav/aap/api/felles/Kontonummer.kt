@@ -1,9 +1,9 @@
 package no.nav.aap.api.felles
 
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.boot.conditionals.EnvUtil.DEV_GCP
-import java.lang.Character.*
+import java.lang.Character.getNumericValue
 import no.nav.boot.conditionals.Cluster.Companion.currentCluster
+import no.nav.boot.conditionals.EnvUtil.DEV_GCP
 
 data class Kontonummer(@get:JsonValue val kontonr: String) {
 

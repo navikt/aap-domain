@@ -1,8 +1,8 @@
 package no.nav.aap.util
 
+import java.net.URI
 import org.springframework.http.HttpHeaders
 import org.springframework.web.util.UriComponentsBuilder
-import java.net.URI
 
 object URIUtil {
     fun uri(base: String, path: String) = uri(URI.create(base), path)

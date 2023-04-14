@@ -1,20 +1,14 @@
 package no.nav.aap.util
 
-import java.net.URI
 import kotlin.random.Random.Default.nextInt
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction
+import reactor.kotlin.core.publisher.toMono
 import no.nav.aap.api.felles.error.IrrecoverableIntegrationException
 import no.nav.aap.api.felles.error.RecoverableIntegrationException
-import no.nav.aap.rest.AbstractWebClientAdapter
 import no.nav.aap.util.ChaosMonkey.MonkeyExceptionType.RECOVERABLE
 import no.nav.boot.conditionals.Cluster
-import no.nav.boot.conditionals.Cluster.Companion
 import no.nav.boot.conditionals.Cluster.Companion.currentCluster
 import no.nav.boot.conditionals.Cluster.Companion.devClusters
-import org.checkerframework.checker.units.qual.t
-import org.springframework.http.HttpStatus
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import reactor.kotlin.core.publisher.toMono
 
 class ChaosMonkey(private val defaultCriteria: () -> Boolean = defaultCrit()) {
 

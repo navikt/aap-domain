@@ -5,21 +5,15 @@ import java.net.URI
 import java.time.Duration
 import java.util.*
 import java.util.function.Predicate
-import no.nav.aap.api.felles.error.IntegrationException
-import no.nav.aap.api.felles.error.RecoverableIntegrationException
-import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
-import no.nav.aap.util.Metrikker.inc
-import no.nav.aap.util.URIUtil.uri
 import org.apache.commons.lang3.exception.ExceptionUtils.hasCause
 import org.slf4j.Logger
 import org.springframework.boot.context.properties.bind.DefaultValue
 import org.springframework.boot.convert.DurationStyle.*
-import org.springframework.web.reactive.function.client.WebClientResponseException
-import org.springframework.web.reactive.function.client.WebClientResponseException.BadRequest
-import org.springframework.web.reactive.function.client.WebClientResponseException.Forbidden
-import org.springframework.web.reactive.function.client.WebClientResponseException.NotFound
-import org.springframework.web.reactive.function.client.WebClientResponseException.Unauthorized
 import reactor.util.retry.Retry.*
+import no.nav.aap.api.felles.error.RecoverableIntegrationException
+import no.nav.aap.rest.AbstractRestConfig.RetryConfig.Companion.DEFAULT
+import no.nav.aap.util.Metrikker.inc
+import no.nav.aap.util.URIUtil.uri
 
 abstract class AbstractRestConfig(val baseUri: URI, val pingPath: String, name: String = baseUri.host, isEnabled: Boolean, val retry: RetryConfig = DEFAULT) : AbstractConfig(name,isEnabled){
     val pingEndpoint = uri(baseUri, pingPath)

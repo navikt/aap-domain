@@ -7,11 +7,9 @@ import java.time.format.DateTimeFormatter
 import org.springframework.boot.SpringBootVersion
 import org.springframework.boot.actuate.endpoint.SanitizableData
 import org.springframework.boot.actuate.endpoint.SanitizingFunction
-import no.nav.aap.util.TimeExtensions.format
 import org.springframework.boot.actuate.info.Info.Builder
 import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.Bean
 import org.springframework.core.SpringVersion
 
 class StartupInfoContributor(private val ctx: ApplicationContext) : InfoContributor {
