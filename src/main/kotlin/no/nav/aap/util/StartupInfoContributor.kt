@@ -5,10 +5,13 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import org.springframework.boot.SpringBootVersion
+import org.springframework.boot.actuate.endpoint.SanitizableData
+import org.springframework.boot.actuate.endpoint.SanitizingFunction
 import no.nav.aap.util.TimeExtensions.format
 import org.springframework.boot.actuate.info.Info.Builder
 import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.context.ApplicationContext
+import org.springframework.context.annotation.Bean
 import org.springframework.core.SpringVersion
 
 class StartupInfoContributor(private val ctx: ApplicationContext) : InfoContributor {
@@ -21,4 +24,24 @@ class StartupInfoContributor(private val ctx: ApplicationContext) : InfoContribu
     private fun Long.local(fmt: String = "yyyy-MM-dd HH:mm:ss") =  LocalDateTime.ofInstant(Instant.ofEpochMilli(this),
             ZoneId.of("Europe/Oslo")).format(DateTimeFormatter.ofPattern(fmt))
 
+}
+
+class  PropertyValueSanitzer()  : SanitizingFunction {
+    override fun apply(data : SanitizableData) : SanitizableData {
+        with(data) {
+            if (key.contains("jwk", ignoreCase = true)) {
+                return withValue(MASK)
+            }
+            if (key.contains("private-key", ignoreCase = true)) {
+                return withValue(MASK)
+            }
+            if (key.contains("password", ignoreCase = true)) {
+                return withValue(MASK)
+            }
+            return this
+        }
+    }
+    companion object {
+        private const val MASK = "******"
+    }
 }
