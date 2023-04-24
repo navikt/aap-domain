@@ -28,16 +28,17 @@ class  PropertyValueSanitzer()  : SanitizingFunction {
     override fun apply(data : SanitizableData) : SanitizableData {
         with(data) {
             if (key.contains("jwk", ignoreCase = true)) {
-                return withValue(MASK)
+                return@with withValue(MASK)
             }
             if (key.contains("private-key", ignoreCase = true)) {
-                return withValue(MASK)
+                return@with withValue(MASK)
             }
             if (key.contains("password", ignoreCase = true)) {
-                return withValue(MASK)
+                return@with withValue(MASK)
             }
-            return this
+            return@with this
         }
+        return data
     }
     companion object {
         private const val MASK = "******"
