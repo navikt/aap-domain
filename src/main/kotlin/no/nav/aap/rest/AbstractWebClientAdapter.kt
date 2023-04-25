@@ -9,6 +9,8 @@ import org.springframework.web.reactive.function.client.ExchangeFunction
 import org.springframework.web.reactive.function.client.WebClient
 import no.nav.aap.health.Pingable
 import no.nav.aap.util.Constants.AAP
+import no.nav.aap.util.Constants.BEHANDLINGSNUMMER
+import no.nav.aap.util.Constants.BID
 import no.nav.aap.util.Constants.TEMA
 import no.nav.aap.util.LoggerUtil.getLogger
 import no.nav.aap.util.MDCUtil.NAV_CALL_ID
@@ -72,5 +74,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
 
         fun consumerFilterFunction() = generellFilterFunction(NAV_CONSUMER_ID) { AAP }
         fun temaFilterFunction() = generellFilterFunction(TEMA) { AAP }
+        fun behandlingFilterFunction() = generellFilterFunction(BEHANDLINGSNUMMER) { BID}
+
     }
 }

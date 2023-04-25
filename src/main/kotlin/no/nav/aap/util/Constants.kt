@@ -14,4 +14,7 @@ object Constants {
     const val AAD = "aad"
     const val TEST = "test"
     const val ONPREM = "onprem"
+    const val BEHANDLINGSNUMMER = "behandlingsnummer"
+    const val BID = "B287"
+
 }
