@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 import java.util.Base64.getEncoder
 import java.util.Locale.getDefault
 import java.util.Optional
+import java.util.UUID
 import kotlin.math.min
 import kotlin.text.Charsets.UTF_8
 import org.springframework.core.env.Environment
@@ -61,6 +62,13 @@ object StringExtensions {
     fun ByteArray.encode() = getEncoder().encodeToString(this)
 
     fun String.encode() = toByteArray(UTF_8).encode()
+
+    fun String?.toUUID() : UUID? =
+        this?.let {
+            runCatching {
+                UUID.fromString(this)
+            }.getOrNull()
+        }
 
 
 }
