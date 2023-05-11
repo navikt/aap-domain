@@ -83,7 +83,7 @@ class LoggingGraphQLInterceptor : GraphQlClientInterceptor {
     }
 }
 
-abstract class AbstractGraphQLAdapter(client : WebClient, protected val graphQL : GraphQlClient, cfg : AbstractRestConfig,
+abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConfig,
                                        val handler : GraphQLErrorHandler = GraphQLDefaultErrorHandler()) :
     AbstractWebClientAdapter(client, cfg) {
 
