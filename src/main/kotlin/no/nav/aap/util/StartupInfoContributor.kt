@@ -12,19 +12,20 @@ import org.springframework.boot.actuate.info.InfoContributor
 import org.springframework.context.ApplicationContext
 import org.springframework.core.SpringVersion
 
-class StartupInfoContributor(private val ctx: ApplicationContext) : InfoContributor {
-    override fun contribute(builder: Builder) {
+class StartupInfoContributor(private val ctx : ApplicationContext) : InfoContributor {
+
+    override fun contribute(builder : Builder) {
         builder.withDetail("extra-info", mapOf("Startup time" to ctx.startupDate.local(),
             "Spring Boot version" to SpringBootVersion.getVersion(),
             "Spring Framework version" to SpringVersion.getVersion()))
     }
 
-    private fun Long.local(fmt: String = "yyyy-MM-dd HH:mm:ss") =  LocalDateTime.ofInstant(Instant.ofEpochMilli(this),
-            ZoneId.of("Europe/Oslo")).format(DateTimeFormatter.ofPattern(fmt))
-
+    private fun Long.local(fmt : String = "yyyy-MM-dd HH:mm:ss") = LocalDateTime.ofInstant(Instant.ofEpochMilli(this),
+        ZoneId.of("Europe/Oslo")).format(DateTimeFormatter.ofPattern(fmt))
 }
 
-class  PropertyValueSanitzer()  : SanitizingFunction {
+class PropertyValueSanitzer : SanitizingFunction {
+
     override fun apply(data : SanitizableData) : SanitizableData {
         with(data) {
             if (key.contains("jwk", ignoreCase = true)) {
@@ -40,7 +41,9 @@ class  PropertyValueSanitzer()  : SanitizingFunction {
         }
         return data
     }
+
     companion object {
+
         private const val MASK = "******"
     }
 }

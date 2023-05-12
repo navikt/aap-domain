@@ -22,11 +22,11 @@ private class MDCAccessor : ThreadLocalAccessor<Map<String, String>> {
     override fun reset() = clear()
 }
 
-private  class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
+private class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes> {
 
     override fun key() = RequestAttributesAccessor::class.java.name
 
-    override fun getValue()  = getRequestAttributes()
+    override fun getValue() = getRequestAttributes()
 
     override fun setValue(value : RequestAttributes) = setRequestAttributes(value)
 
@@ -35,11 +35,11 @@ private  class RequestAttributesAccessor : ThreadLocalAccessor<RequestAttributes
 
 object AccessorUtil {
 
-    fun init()  {
+    fun init() {
         enableAutomaticContextPropagation()
         getInstance().apply {
             registerThreadLocalAccessor(RequestAttributesAccessor())
             registerThreadLocalAccessor(MDCAccessor())
         }
-     }
+    }
 }

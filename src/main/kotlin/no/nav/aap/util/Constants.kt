@@ -1,6 +1,7 @@
 package no.nav.aap.util
 
 object Constants {
+
     const val NORG = "norg"
     const val ORGANISASJON = "organisasjon"
     const val JOARK = "joark"
@@ -16,5 +17,4 @@ object Constants {
     const val ONPREM = "onprem"
     const val BEHANDLINGSNUMMER = "behandlingsnummer"
     const val BID = "B287"
-
 }

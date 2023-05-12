@@ -6,11 +6,12 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 
 class TokenXJacksonModule : SimpleModule() {
-        override fun setupModule(ctx: SetupContext?) =
-            SimpleModule(versionFor(TokenXJacksonModule::class.java))
-                .setMixInAnnotation(OAuth2AccessTokenResponse::class.java, IgnoreUnknownMixin::class.java)
-                .setupModule(ctx)
 
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        private interface IgnoreUnknownMixin
+    override fun setupModule(ctx : SetupContext?) =
+        SimpleModule(versionFor(TokenXJacksonModule::class.java))
+            .setMixInAnnotation(OAuth2AccessTokenResponse::class.java, IgnoreUnknownMixin::class.java)
+            .setupModule(ctx)
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private interface IgnoreUnknownMixin
 }

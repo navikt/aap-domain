@@ -7,9 +7,8 @@ import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 
 object TokenExtensions {
 
-     fun OAuth2AccessTokenService.bearerToken(props: ClientProperties?, url: URI) =
-         props?.let {
+    fun OAuth2AccessTokenService.bearerToken(props : ClientProperties?, url : URI) =
+        props?.let {
             getAccessToken(it).accessToken.asBearer()
         } ?: throw IllegalArgumentException("Ingen konfigurasjon for $url")
-
 }

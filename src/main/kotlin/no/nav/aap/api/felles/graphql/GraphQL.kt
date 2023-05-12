@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.BadGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.NotFoundGraphQLException
@@ -55,6 +54,7 @@ class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
 }
 
 object GraphQLExtensions {
+
     private val log = LoggerUtil.getLogger(javaClass)
 
     const val IDENT = "ident"
@@ -74,6 +74,7 @@ object GraphQLExtensions {
             else -> UnhandledGraphQLException(INTERNAL_SERVER_ERROR, msg)
         }
 }
+
 class LoggingGraphQLInterceptor : GraphQlClientInterceptor {
 
     private val log = LoggerFactory.getLogger(LoggingGraphQLInterceptor::class.java)
@@ -84,7 +85,7 @@ class LoggingGraphQLInterceptor : GraphQlClientInterceptor {
 }
 
 abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConfig,
-                                       val handler : GraphQLErrorHandler = GraphQLDefaultErrorHandler()) :
+                                      val handler : GraphQLErrorHandler = GraphQLDefaultErrorHandler()) :
     AbstractWebClientAdapter(client, cfg) {
 
     protected inline fun <reified T> query(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, List<String>>) =

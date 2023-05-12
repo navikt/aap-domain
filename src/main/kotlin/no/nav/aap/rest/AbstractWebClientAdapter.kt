@@ -22,10 +22,10 @@ import no.nav.aap.util.MDCUtil.NAV_CONSUMER_ID2
 import no.nav.aap.util.MDCUtil.callId
 import no.nav.aap.util.MDCUtil.consumerId
 
-abstract class AbstractWebClientAdapter(protected open val webClient: WebClient, protected open val cfg: AbstractRestConfig, private val pingClient: WebClient = webClient) : Pingable {
+abstract class AbstractWebClientAdapter(protected open val webClient : WebClient, protected open val cfg : AbstractRestConfig,
+                                        private val pingClient : WebClient = webClient) : Pingable {
 
-
-    override fun ping() : Map<String,String> {
+    override fun ping() : Map<String, String> {
         if (isEnabled()) {
             pingClient
                 .get()
@@ -34,7 +34,7 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
                 .retrieve()
                 .toBodilessEntity()
                 .doOnSuccess { log.trace("Ping ${pingEndpoint()} OK") }
-                .doOnError { t: Throwable -> log.warn("Ping feilet", t) }
+                .doOnError { t : Throwable -> log.warn("Ping feilet", t) }
                 .contextCapture()
                 .block()
             return emptyMap()
@@ -49,32 +49,32 @@ abstract class AbstractWebClientAdapter(protected open val webClient: WebClient,
     override fun toString() = "webClient=$webClient, cfg=$cfg, pingClient=$pingClient, baseUri=$baseUri"
 
     companion object {
+
         @JvmStatic
-        protected val log: Logger = getLogger(AbstractWebClientAdapter::class.java)
-        fun correlatingFilterFunction(defaultConsumerId: String) =
-            ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
+        protected val log : Logger = getLogger(AbstractWebClientAdapter::class.java)
+        fun correlatingFilterFunction(defaultConsumerId : String) =
+            ExchangeFilterFunction { req : ClientRequest, next : ExchangeFunction ->
                 next.exchange(
-                        ClientRequest.from(req)
-                            .header(NAV_CONSUMER_ID, consumerId(defaultConsumerId))
-                            .header(NAV_CONSUMER_ID2, consumerId(defaultConsumerId))
-                            .header(NAV_CALL_ID, callId())
-                            .header(NAV_CALL_ID1, callId())
-                            .header(NAV_CALL_ID2, callId())
-                            .header(NAV_CALL_ID3, callId())
-                            .build())
+                    ClientRequest.from(req)
+                        .header(NAV_CONSUMER_ID, consumerId(defaultConsumerId))
+                        .header(NAV_CONSUMER_ID2, consumerId(defaultConsumerId))
+                        .header(NAV_CALL_ID, callId())
+                        .header(NAV_CALL_ID1, callId())
+                        .header(NAV_CALL_ID2, callId())
+                        .header(NAV_CALL_ID3, callId())
+                        .build())
             }
 
-        fun generellFilterFunction(key: String, value: () -> String) =
-            ExchangeFilterFunction { req: ClientRequest, next: ExchangeFunction ->
+        fun generellFilterFunction(key : String, value : () -> String) =
+            ExchangeFilterFunction { req : ClientRequest, next : ExchangeFunction ->
                 next.exchange(
-                        ClientRequest.from(req)
-                            .header(key, value.invoke())
-                            .build())
+                    ClientRequest.from(req)
+                        .header(key, value.invoke())
+                        .build())
             }
 
         fun consumerFilterFunction() = generellFilterFunction(NAV_CONSUMER_ID) { AAP }
         fun temaFilterFunction() = generellFilterFunction(TEMA) { AAP }
-        fun behandlingFilterFunction() = generellFilterFunction(BEHANDLINGSNUMMER) { BID}
-
+        fun behandlingFilterFunction() = generellFilterFunction(BEHANDLINGSNUMMER) { BID }
     }
 }

@@ -15,20 +15,21 @@ import no.nav.security.token.support.client.spring.ClientConfigurationProperties
 import no.nav.security.token.support.client.spring.oauth2.ClientConfigurationPropertiesMatcher
 
 class TokenXFilterFunction(
-        private val configs: ClientConfigurationProperties,
-        private val service: OAuth2AccessTokenService,
-        private val matcher: ClientConfigurationPropertiesMatcher,
-        private val authContext: AuthContext) : ExchangeFilterFunction {
+    private val configs : ClientConfigurationProperties,
+    private val service : OAuth2AccessTokenService,
+    private val matcher : ClientConfigurationPropertiesMatcher,
+    private val authContext : AuthContext) : ExchangeFilterFunction {
+
     private val log = LoggerUtil.getLogger(javaClass)
 
-    override fun filter(req: ClientRequest, next: ExchangeFunction): Mono<ClientResponse> {
+    override fun filter(req : ClientRequest, next : ExchangeFunction) : Mono<ClientResponse> {
         val url = req.url()
         val cfg = matcher.findProperties(configs, url).orElse(null)
         if (cfg != null && authContext.isAuthenticated()) {
-            log.trace("Gjør token exchange for $url")
+            log.trace("Gjør token exchange for {}", url)
             val token = service.getAccessToken(cfg).accessToken
             log.trace("Token exchange for {} OK", url)
-            log.trace(CONFIDENTIAL,"Token er {}", token)
+            log.trace(CONFIDENTIAL, "Token er {}", token)
             return next.exchange(ClientRequest.from(req).header(AUTHORIZATION, token.asBearer()).build())
         }
         log.trace("Ingen token exchange for {}", url)

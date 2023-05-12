@@ -9,8 +9,8 @@ import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter.ofPattern
 
 object TimeExtensions {
-    fun Long.format(fmt: String = "yyyy-MM-dd HH:mm:ss") =  ofInstant(ofEpochMilli(this), systemDefault()).format(ofPattern(fmt))
 
-     fun LocalDateTime.toUTC(): LocalDateTime = atZone(of("Europe/Oslo")).withZoneSameInstant(UTC).toLocalDateTime()
+    fun Long.format(fmt : String = "yyyy-MM-dd HH:mm:ss") = ofInstant(ofEpochMilli(this), systemDefault()).format(ofPattern(fmt))
 
+    fun LocalDateTime.toUTC() : LocalDateTime = atZone(of("Europe/Oslo")).withZoneSameInstant(UTC).toLocalDateTime()
 }
