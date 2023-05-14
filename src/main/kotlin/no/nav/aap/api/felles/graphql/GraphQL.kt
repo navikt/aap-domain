@@ -9,6 +9,7 @@ import org.springframework.graphql.client.FieldAccessException
 import org.springframework.graphql.client.GraphQlClient
 import org.springframework.graphql.client.GraphQlClientInterceptor
 import org.springframework.graphql.client.GraphQlClientInterceptor.Chain
+import org.springframework.graphql.client.GraphQlTransportException
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
@@ -120,12 +121,13 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                   }
                   with(it.field(query.second)) {
                       if (errors.isNotEmpty()) {
-                          handler.handle(errors.oversett("${errors.size} feil i responsen fra ${cfg.baseUri} ($errors"))
+                          throw errors.oversett("${errors.size} feil i responsen fra ${cfg.baseUri} ($errors")
                       }
                       else toEntity(T::class.java)
                   }
               }
-              .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException })
+              .doOnError { log.warn("Fikk exception fra $baseUri",it) }
+              .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
               .contextCapture()
               .block()
       }.getOrElse {
