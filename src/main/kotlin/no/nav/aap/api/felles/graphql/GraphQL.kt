@@ -1,7 +1,9 @@
 package no.nav.aap.api.felles.graphql
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
+import java.util.function.Predicate
 import org.slf4j.LoggerFactory
+import org.springframework.graphql.ResponseError
 import org.springframework.graphql.client.ClientGraphQlRequest
 import org.springframework.graphql.client.FieldAccessException
 import org.springframework.graphql.client.GraphQlClient
@@ -13,12 +15,15 @@ import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.util.retry.Retry.RetrySignal
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.BadGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.NotFoundGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnauthenticatedGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnauthorizedGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnexpectedResponseGraphQLException
+import no.nav.aap.api.felles.error.RecoverableGraphQLException
 import no.nav.aap.api.felles.error.RecoverableGraphQLException.UnhandledGraphQLException
+import no.nav.aap.api.felles.error.RecoverableIntegrationException
 import no.nav.aap.api.felles.graphql.GraphQLErrorHandler.Companion.BadRequest
 import no.nav.aap.api.felles.graphql.GraphQLErrorHandler.Companion.NotFound
 import no.nav.aap.api.felles.graphql.GraphQLErrorHandler.Companion.Unauthenticated
@@ -60,8 +65,9 @@ object GraphQLExtensions {
     const val IDENT = "ident"
     const val IDENTER = "identer"
 
-    fun FieldAccessException.oversett() = oversett(response.errors.firstOrNull()?.extensions?.get("code")?.toString(), message ?: "Ukjent feil").also { e ->
-        log.warn("GraphQL oppslag returnerte ${response.errors.size} feil. ${response.errors}, oversatte feilkode til ${e.javaClass.simpleName}",
+    fun FieldAccessException.oversett() = response.errors.oversett(message)
+    fun List<ResponseError>.oversett(message: String?) = oversett(firstOrNull()?.extensions?.get("code")?.toString(), message ?: "Ukjent feil").also { e ->
+        log.warn("GraphQL oppslag returnerte $size feil. $this, oversatte feilkode til ${e.javaClass.simpleName}",
             this)
     }
 
@@ -103,6 +109,30 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
             handler.handle(it)
         }
 
+    protected inline fun <reified T> query1(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>, info : String) =
+      runCatching {
+          graphQL.document(query.first)
+              .variables(vars)
+              .execute()
+              .mapNotNull {
+                  if (!it.isValid) {
+                      throw BadGraphQLException(BAD_REQUEST,"Ugyldig respons fra graphQL")
+                  }
+                  with(it.field(query.second)) {
+                      if (errors.isNotEmpty()) {
+                          handler.handle(errors.oversett("${errors.size} feil i responsen fra ${cfg.baseUri} ($errors"))
+                      }
+                      else toEntity(T::class.java)
+                  }
+              }
+              .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException })
+              .contextCapture()
+              .block()
+      }.getOrElse {
+          handler.handle(it)
+      }
+
+
     protected inline fun <reified T> query(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>, info : String) =
         runCatching {
             graphQL
@@ -118,4 +148,4 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
             log.warn("Query $query feilet. $info", t)
             handler.handle(t)
         }
-}
+    }

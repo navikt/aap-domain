@@ -1,5 +1,6 @@
 package no.nav.aap.rest
 
+import java.util.function.Predicate
 import org.slf4j.Logger
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.TEXT_PLAIN
@@ -44,6 +45,8 @@ abstract class AbstractWebClientAdapter(protected open val webClient : WebClient
 
     override fun name() = cfg.name
     protected val baseUri = cfg.baseUri
+
+    protected fun retrySpec(log: Logger,path: String, filter: Predicate<Throwable>) = cfg.retrySpec(log,path,filter)
     override fun pingEndpoint() = "${cfg.pingEndpoint}"
     override fun isEnabled() = cfg.isEnabled
     override fun toString() = "webClient=$webClient, cfg=$cfg, pingClient=$pingClient, baseUri=$baseUri"
