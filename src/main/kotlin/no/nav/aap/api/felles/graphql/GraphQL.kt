@@ -110,7 +110,13 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .variables(vars)
                 .retrieve(query.second)
                 .toEntity(T::class.java)
-                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
+                .onErrorMap {
+                    when(it) {
+                        is FieldAccessException -> it.oversett()
+                        is GraphQlTransportException -> BadGraphQLException(BAD_REQUEST,it.message ?: "Transport feil",it)
+                        else ->  it
+                    }
+                }
                 .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException})
                 .contextCapture()
                 .block().also {
