@@ -32,7 +32,6 @@ interface GraphQLErrorHandler {
 
     fun handle(e : Throwable) : Nothing
 
-
 }
 
 class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
@@ -94,7 +93,7 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                         else ->  it
                     }
                 }
-                .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
+                .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException})
                 .contextCapture()
                 .block() ?: emptyList()).also {
                 log.trace("Slo opp liste av {} {}", T::class.java.simpleName, it)
@@ -112,7 +111,7 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .retrieve(query.second)
                 .toEntity(T::class.java)
                 .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
-                .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
+                .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException})
                 .contextCapture()
                 .block().also {
                     log.trace("Slo opp {} {}", T::class.java.simpleName, it)
