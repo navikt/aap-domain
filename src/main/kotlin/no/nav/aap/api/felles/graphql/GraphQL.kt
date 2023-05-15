@@ -40,14 +40,7 @@ interface GraphQLErrorHandler {
 
     fun handle(e : Throwable) : Nothing
 
-    companion object {
 
-        const val Ok = "ok"
-        const val Unauthorized = "unauthorized"
-        const val Unauthenticated = "unauthenticated"
-        const val BadRequest = "bad_request"
-        const val NotFound = "not_found"
-    }
 }
 
 class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
@@ -55,7 +48,7 @@ class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
     override fun handle(e : Throwable) : Nothing {
         when (e) {
             is IntegrationException -> throw e
-            else -> throw UnhandledGraphQLException(INTERNAL_SERVER_ERROR, "GraphQL oppslag  feilet", e)
+            else -> throw UnhandledGraphQLException(INTERNAL_SERVER_ERROR, "GraphQL oppslag feilet", e)
         }
     }
 }
@@ -63,14 +56,9 @@ class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
 object GraphQLExtensions {
 
     private val log = LoggerUtil.getLogger(javaClass)
-
-    const val IDENT = "ident"
-    const val IDENTER = "identer"
-
     fun FieldAccessException.oversett() = response.errors.oversett(message)
-    fun List<ResponseError>.oversett(message: String?) = oversett(firstOrNull()?.extensions?.get("code")?.toString(), message ?: "Ukjent feil").also { e ->
-        log.warn("GraphQL oppslag returnerte $size feil. $this, oversatte feilkode til ${e.javaClass.simpleName}",
-            this)
+    private fun List<ResponseError>.oversett(message: String?) = oversett(firstOrNull()?.extensions?.get("code")?.toString(), message ?: "Ukjent feil").also { e ->
+        log.warn("GraphQL oppslag returnerte $size feil. $this, oversatte feilkode til ${e.javaClass.simpleName}", this)
     }
 
     private fun oversett(kode : String?, msg : String) =
@@ -81,6 +69,10 @@ object GraphQLExtensions {
             NotFound -> NotFoundGraphQLException(NOT_FOUND, msg)
             else -> UnhandledGraphQLException(INTERNAL_SERVER_ERROR, msg)
         }
+    private const val Unauthorized = "unauthorized"
+    private const val Unauthenticated = "unauthenticated"
+    private const val BadRequest = "bad_request"
+    private const val NotFound = "not_found"
 }
 
 class LoggingGraphQLInterceptor : GraphQlClientInterceptor {
@@ -103,7 +95,13 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .variables(vars)
                 .retrieve(query.second)
                 .toEntityList(T::class.java)
-                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
+                .onErrorMap {
+                    when(it) {
+                        is FieldAccessException -> it.oversett()
+                        is GraphQlTransportException -> BadGraphQLException(BAD_REQUEST,"Transport error",it)
+                        else ->  it
+                    }
+                }
                 .retryWhen(retrySpec(log, "/graphql") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
                 .contextCapture()
                 .block() ?: emptyList()).also {
