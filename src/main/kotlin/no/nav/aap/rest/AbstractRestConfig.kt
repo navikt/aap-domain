@@ -50,7 +50,7 @@ abstract class AbstractRestConfig(val baseUri : URI, val pingPath : String, name
                     inc(METRIKKNAVN, BASE, "$baseUri", PATH, path, TYPE, SUCCESS)
                 }
                 else {
-                    log.warn("${it.totalRetries() + 1}. retry mot $baseUri/$path feilet på forsøk ${it.totalRetries() + 1} med exception ${it.name()}")
+                    log.warn("${it.totalRetries() + 1}. retry mot $baseUri/$path feilet på forsøk ${it.totalRetries() + 1} med exception ${it.name()}",it)
                 }
             }
 
