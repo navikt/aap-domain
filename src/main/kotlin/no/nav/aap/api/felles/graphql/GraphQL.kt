@@ -21,8 +21,10 @@ import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.BadGraphQLExcep
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.NotFoundGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnauthenticatedGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnauthorizedGraphQLException
+import no.nav.aap.api.felles.error.IrrecoverableIntegrationException
 import no.nav.aap.api.felles.error.RecoverableGraphQLException
 import no.nav.aap.api.felles.error.RecoverableGraphQLException.UnhandledGraphQLException
+import no.nav.aap.api.felles.graphql.GraphQLDefaultErrorHandler.GraphQLExtensions.oversett
 import no.nav.aap.api.felles.graphql.GraphQLExtensions.oversett
 import no.nav.aap.rest.AbstractRestConfig
 import no.nav.aap.rest.AbstractWebClientAdapter
@@ -34,12 +36,13 @@ interface GraphQLErrorHandler {
 
 }
 
+/* Denne kalles når retry har gitt opp */
 class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
 
     override fun handle(e : Throwable) : Nothing {
         when (e) {
             is IntegrationException -> throw e
-            else -> throw UnhandledGraphQLException(INTERNAL_SERVER_ERROR, "GraphQL oppslag feilet", e)
+            else -> throw IrrecoverableIntegrationException(e.message, cause = e)
         }
     }
 }
