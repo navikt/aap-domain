@@ -114,7 +114,7 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
         }
 
 
-    protected inline fun <reified T> query(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>, info : String) =
+    protected inline fun <reified T> query(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>) =
         runCatching {
             graphQL
                 .documentName(query.first)
@@ -128,7 +128,6 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                     log.trace("Slo opp {} {}", T::class.java.simpleName, it)
                 }
         }.getOrElse { t ->
-            log.warn("Query $query feilet. $info", t)
             handler.handle(t)
         }
     }
