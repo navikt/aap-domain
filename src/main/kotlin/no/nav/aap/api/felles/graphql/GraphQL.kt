@@ -104,8 +104,8 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .retrieve(query.second)
                 .toEntityList(T::class.java)
                 .contextCapture()
-                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
                 .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
+                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
                 .block() ?: emptyList()).also {
                 log.trace("Slo opp liste av {} {}", T::class.java.simpleName, it)
             }
