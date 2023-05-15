@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 import reactor.util.retry.Retry.RetrySignal
+import no.nav.aap.api.felles.error.IntegrationException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.BadGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.NotFoundGraphQLException
 import no.nav.aap.api.felles.error.IrrecoverableGraphQLException.UnauthenticatedGraphQLException
@@ -52,8 +54,7 @@ class GraphQLDefaultErrorHandler : GraphQLErrorHandler {
 
     override fun handle(e : Throwable) : Nothing {
         when (e) {
-            is MismatchedInputException -> throw UnexpectedResponseGraphQLException(BAD_REQUEST, "Ikke-håndtert respons")
-            is FieldAccessException -> throw e.oversett()
+            is IntegrationException -> throw e
             else -> throw UnhandledGraphQLException(INTERNAL_SERVER_ERROR, "GraphQL oppslag  feilet", e)
         }
     }
@@ -103,36 +104,14 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .retrieve(query.second)
                 .toEntityList(T::class.java)
                 .contextCapture()
+                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
+                .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
                 .block() ?: emptyList()).also {
                 log.trace("Slo opp liste av {} {}", T::class.java.simpleName, it)
             }
         }.getOrElse {
             handler.handle(it)
         }
-
-    protected inline fun <reified T> query1(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>, info : String) =
-      runCatching {
-          graphQL.document(query.first)
-              .variables(vars)
-              .execute()
-              .mapNotNull {
-                  if (!it.isValid) {
-                      throw BadGraphQLException(BAD_REQUEST,"Ugyldig respons fra graphQL")
-                  }
-                  with(it.field(query.second)) {
-                      if (errors.isNotEmpty()) {
-                          throw errors.oversett("${errors.size} feil i responsen fra ${cfg.baseUri} ($errors")
-                      }
-                      else toEntity(T::class.java)
-                  }
-              }
-              .doOnError { log.warn("Fikk exception fra $baseUri",it) }
-              .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
-              .contextCapture()
-              .block()
-      }.getOrElse {
-          handler.handle(it)
-      }
 
 
     protected inline fun <reified T> query(graphQL : GraphQlClient, query : Pair<String, String>, vars : Map<String, String>, info : String) =
@@ -143,6 +122,8 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .retrieve(query.second)
                 .toEntity(T::class.java)
                 .contextCapture()
+                .onErrorMap { if (it  is FieldAccessException)  it.oversett() else it}
+                .retryWhen(retrySpec(log, "/") { it is RecoverableGraphQLException  || it is GraphQlTransportException})
                 .block().also {
                     log.trace("Slo opp {} {}", T::class.java.simpleName, it)
                 }
