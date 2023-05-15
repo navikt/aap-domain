@@ -90,7 +90,7 @@ abstract class AbstractGraphQLAdapter(client : WebClient, cfg : AbstractRestConf
                 .onErrorMap {
                     when(it) {
                         is FieldAccessException -> it.oversett()
-                        is GraphQlTransportException -> BadGraphQLException(BAD_REQUEST,"Transport error",it)
+                        is GraphQlTransportException -> BadGraphQLException(BAD_REQUEST,it.message ?: "Transport feil",it)
                         else ->  it
                     }
                 }
