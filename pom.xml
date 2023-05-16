@@ -14,9 +14,13 @@
         <relativePath />
     </parent>
     <properties>
+        <conditionals.version>5.0.7</conditionals.version>
+        <context.propagation.version>1.0.2</context.propagation.version>
         <i18n.version>1.29</i18n.version>
         <java.version>17</java.version>
         <kotlin.version>1.8.21</kotlin.version>
+        <reactor.extensions.version>1.2.2</reactor.extensions.version>
+        <slack.version>1.28.0</slack.version>
         <token.validation.version>3.0.9</token.validation.version>
     </properties>
     <dependencies>
@@ -27,12 +31,12 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>context-propagation</artifactId>
-            <version>1.0.2</version>
+            <version>${context.propagation.version}</version>
         </dependency>
         <dependency>
             <groupId>io.projectreactor.kotlin</groupId>
             <artifactId>reactor-kotlin-extensions</artifactId>
-            <version>1.2.2</version>
+            <version>${reactor.extensions.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -41,7 +45,7 @@
         <dependency>
             <groupId>no.nav.boot</groupId>
             <artifactId>boot-conditionals</artifactId>
-            <version>5.0.7</version>
+            <version>${conditionals.version}</version>
         </dependency>
         <dependency>
             <groupId>no.nav.security</groupId>

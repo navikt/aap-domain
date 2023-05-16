@@ -8,7 +8,7 @@ import no.nav.aap.api.felles.error.RecoverableIntegrationException
 
 object WebClientExtensions {
 
-    inline fun <reified T> ClientResponse.response(log : Logger) =
+    inline fun <reified T> ClientResponse.response() =
         with(statusCode()) {
             if (is2xxSuccessful) {
                 bodyToMono(T::class.java)
