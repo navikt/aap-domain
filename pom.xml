@@ -10,18 +10,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.7</version>
+        <version>3.1.0</version>
         <relativePath />
     </parent>
     <properties>
-        <conditionals.version>5.0.7</conditionals.version>
+        <conditionals.version>5.0.8</conditionals.version>
         <context.propagation.version>1.0.2</context.propagation.version>
         <i18n.version>1.29</i18n.version>
         <java.version>17</java.version>
         <kotlin.version>1.8.21</kotlin.version>
         <reactor.extensions.version>1.2.2</reactor.extensions.version>
         <slack.version>1.28.0</slack.version>
-        <token.validation.version>3.0.9</token.validation.version>
+        <token.validation.version>3.1.0</token.validation.version>
     </properties>
     <dependencies>
         <dependency>
