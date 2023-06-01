@@ -6,7 +6,6 @@
     <version>2.0.78-SNAPSHOT</version>
     <name>aap-domain</name>
     <description>aap-domain</description>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
