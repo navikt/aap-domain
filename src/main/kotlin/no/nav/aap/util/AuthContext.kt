@@ -5,6 +5,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ThreadContextElement
 import kotlinx.coroutines.async
+import kotlinx.coroutines.slf4j.MDCContext
+import org.apache.logging.slf4j.MDCContextMap
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import no.nav.aap.api.felles.Fødselsnummer
@@ -45,4 +47,4 @@ class RequestContextCoroutineContext(private val requestAttributes: RequestAttri
         } ?: RequestContextHolder.resetRequestAttributes()
     }
 }
-fun <T> CoroutineScope.requestContextAwareAsync(block: suspend CoroutineScope.() -> T) = async(Dispatchers.IO + RequestContextCoroutineContext(),block=block)
+fun <T> CoroutineScope.requestContextAwareAsync(block: suspend CoroutineScope.() -> T) = async(Dispatchers.IO + MDCContext() + RequestContextCoroutineContext(),block=block)
