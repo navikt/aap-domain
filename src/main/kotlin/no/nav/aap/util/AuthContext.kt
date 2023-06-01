@@ -1,7 +1,10 @@
 package no.nav.aap.util
 
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ThreadContextElement
+import kotlinx.coroutines.async
 import org.springframework.web.context.request.RequestAttributes
 import org.springframework.web.context.request.RequestContextHolder
 import no.nav.aap.api.felles.Fødselsnummer
@@ -42,3 +45,4 @@ class RequestContextCoroutineContext(private val requestAttributes: RequestAttri
         } ?: RequestContextHolder.resetRequestAttributes()
     }
 }
+fun <T> CoroutineScope.requestContextAwareAsync(block: suspend CoroutineScope.() -> T) = async(Dispatchers.IO + RequestContextCoroutineContext(),block=block)
