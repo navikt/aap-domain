@@ -17,7 +17,7 @@
         <context.propagation.version>1.1.0</context.propagation.version>
         <i18n.version>1.29</i18n.version>
         <java.version>17</java.version>
-        <kotlin.version>1.9.21</kotlin.version>
+        <kotlin.version>1.9.22</kotlin.version>
         <kotlin.coroutines.version>1.7.3</kotlin.coroutines.version>
         <reactor.extensions.version>1.2.2</reactor.extensions.version>
         <slack.version>1.28.0</slack.version>
