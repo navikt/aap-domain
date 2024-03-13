@@ -21,7 +21,7 @@
         <kotlin.coroutines.version>1.8.0</kotlin.coroutines.version>
         <reactor.extensions.version>1.2.2</reactor.extensions.version>
         <slack.version>1.28.0</slack.version>
-        <token.validation.version>3.1.0</token.validation.version>
+        <token.validation.version>4.1.3</token.validation.version>
     </properties>
     <dependencies>
         <dependency>
