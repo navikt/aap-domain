@@ -6,6 +6,7 @@ on:
       - main         # Push events on master branch
     
 jobs:
+
   release-notes:
     runs-on: ubuntu-latest
     steps:
@@ -17,6 +18,9 @@ jobs:
   
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       
